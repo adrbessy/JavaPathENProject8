@@ -1,5 +1,6 @@
 package com.tourguide.controller;
 
+import com.jsoniter.output.JsonStream;
 import com.tourguide.model.User;
 import com.tourguide.service.TourGuideService;
 import java.util.List;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import gpsUtil.location.VisitedLocation;
+import tripPricer.Provider;
+
 
 @RestController
 public class TourGuideController {
@@ -23,7 +26,7 @@ public class TourGuideController {
   @RequestMapping("/getLocation")
   public String getLocation(@RequestParam String userName) {
     VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
-    return toString(visitedLocation.location);
+    return JsonStream.serialize(visitedLocation.location);
   }
 
   // TODO: Change this method to no longer return a List of Attractions.
