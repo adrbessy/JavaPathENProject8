@@ -1,5 +1,7 @@
 package com.tourguide.service;
 
+import com.tourguide.model.User;
+import com.tourguide.model.UserReward;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -11,20 +13,19 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
+import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
-import tourGuide.helper.InternalTestHelper;
-import tourGuide.service.RewardsService;
-import tourGuide.tracker.Tracker;
-import tourGuide.user.UserReward;
+import tripPricer.Provider;
 import tripPricer.TripPricer;
 
 @Service
 public class TourGuideService {
-  private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
+  private Logger logger = LogManager.getLogger(TourGuideService.class);
   private final GpsUtil gpsUtil;
   private final RewardsService rewardsService;
   private final TripPricer tripPricer = new TripPricer();

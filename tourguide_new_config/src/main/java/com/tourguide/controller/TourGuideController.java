@@ -1,5 +1,6 @@
 package com.tourguide.controller;
 
+import com.tourguide.model.User;
 import com.tourguide.service.TourGuideService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class TourGuideController {
   @RequestMapping("/getLocation")
   public String getLocation(@RequestParam String userName) {
     VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
-    return JsonStream.serialize(visitedLocation.location);
+    return toString(visitedLocation.location);
   }
 
   // TODO: Change this method to no longer return a List of Attractions.
