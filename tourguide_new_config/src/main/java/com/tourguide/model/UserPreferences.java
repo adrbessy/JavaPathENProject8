@@ -1,5 +1,6 @@
 package com.tourguide.model;
 
+import java.util.UUID;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ public class UserPreferences {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  private String userName;
+  private UUID userId;
 
   private int attractionProximity = Integer.MAX_VALUE;
   private CurrencyUnit currency = Monetary.getCurrency("USD");
