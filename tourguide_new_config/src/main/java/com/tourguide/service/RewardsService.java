@@ -54,7 +54,7 @@ public class RewardsService {
   }
 
   private int getRewardPoints(Attraction attraction, User user) {
-    return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
+    return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getId());
   }
 
   public double getDistance(Location loc1, Location loc2) {

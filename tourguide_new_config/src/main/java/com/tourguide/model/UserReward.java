@@ -24,7 +24,9 @@ public class UserReward {
   private UUID userId;
 
   public final VisitedLocation visitedLocation;
+
   public final Attraction attraction;
+
   private int rewardPoints;
 
   public UserReward(VisitedLocation visitedLocation, Attraction attraction, int rewardPoints) {
