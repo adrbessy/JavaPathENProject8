@@ -8,12 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import gpsUtil.GpsUtil;
 import gpsUtil.location.VisitedLocation;
 import tripPricer.Provider;
 
 
 @RestController
 public class TourGuideController {
+
+  @Autowired
+  public GpsUtil gpsUtil;
 
   @Autowired
   TourGuideService tourGuideService;

@@ -2,10 +2,26 @@ package com.tourguide.model;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import org.javamoney.moneta.Money;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@EqualsAndHashCode
+@Getter
+@Setter
+@Entity
 public class UserPreferences {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  private String userName;
 
   private int attractionProximity = Integer.MAX_VALUE;
   private CurrencyUnit currency = Monetary.getCurrency("USD");
@@ -15,9 +31,6 @@ public class UserPreferences {
   private int ticketQuantity = 1;
   private int numberOfAdults = 1;
   private int numberOfChildren = 0;
-
-  public UserPreferences() {
-  }
 
   public void setAttractionProximity(int attractionProximity) {
     this.attractionProximity = attractionProximity;

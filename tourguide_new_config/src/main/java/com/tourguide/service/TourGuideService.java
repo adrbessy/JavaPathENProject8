@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
@@ -25,12 +26,20 @@ import tripPricer.TripPricer;
 
 @Service
 public class TourGuideService {
+
   private Logger logger = LogManager.getLogger(TourGuideService.class);
-  private final GpsUtil gpsUtil;
-  private final RewardsService rewardsService;
+
+  @Autowired
+  private RewardsService rewardsService;
+  @Autowired
+  public Tracker tracker;
+
+  private GpsUtil gpsUtil;
+  // private final RewardsService rewardsService;
   private final TripPricer tripPricer = new TripPricer();
-  public final Tracker tracker;
+  // public final Tracker tracker;
   boolean testMode = true;
+
 
   public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
     this.gpsUtil = gpsUtil;
@@ -45,6 +54,7 @@ public class TourGuideService {
     tracker = new Tracker(this);
     addShutDownHook();
   }
+
 
   public List<UserReward> getUserRewards(User user) {
     return user.getUserRewards();
