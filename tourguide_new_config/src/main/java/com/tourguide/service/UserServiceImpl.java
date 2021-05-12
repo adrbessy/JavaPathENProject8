@@ -26,6 +26,10 @@ public class UserServiceImpl implements UserService {
   public List<User> getUsers() {
     logger.debug("in the method getUsers in the class UserServiceImpl");
     List<User> userList = new ArrayList<>();
+    // VisitedLocation visLoc = new VisitedLocation();
+    // System.out.println("visLoc : " + visLoc);
+    // Location location = new Location();
+    // System.out.println("visLoc : " + visLoc);
     try {
       userList = userRepository.findAll();
     } catch (Exception exception) {
@@ -41,11 +45,11 @@ public class UserServiceImpl implements UserService {
    * @return The user
    */
   @Override
-  public User getUser(Integer id) {
+  public User getUser(String username) {
     logger.debug("in the method getUser in the class UserServiceImpl");
     User user = null;
     try {
-      user = userRepository.findById(id);
+      user = userRepository.findByUserName(username);
     } catch (Exception exception) {
       logger.error("Error in the method getUser :" + exception.getMessage());
     }

@@ -46,11 +46,11 @@ public class UserController {
    * @return - A user account
    */
   @GetMapping("/user")
-  public User getUser(@RequestParam Integer id) {
+  public User getUser(@RequestParam String username) {
     User user = null;
     try {
       logger.info("Get request with the endpoint 'user'");
-      user = userService.getUser(id);
+      user = userService.getUser(username);
       logger.info(
           "response following the GET on the endpoint 'user'.");
     } catch (Exception exception) {
