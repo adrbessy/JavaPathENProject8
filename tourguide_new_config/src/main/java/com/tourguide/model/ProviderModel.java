@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import tripPricer.Provider;
 
 @EqualsAndHashCode
 @Getter
@@ -21,7 +20,7 @@ public class ProviderModel {
   private Integer id;
 
   private UUID userId;
-
-  private Provider provider;
-
+  /*
+   * private Provider provider;
+   */
 }

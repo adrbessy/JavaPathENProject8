@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import gpsUtil.location.VisitedLocation;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +20,7 @@ public class VisitedLocationModel {
   private Integer id;
 
   private UUID userId;
-
-  private VisitedLocation visitedLocation;
-
+  /*
+   * private VisitedLocation visitedLocation;
+   */
 }

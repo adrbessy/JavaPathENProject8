@@ -1,12 +1,6 @@
 package com.tourguide;
 
-import static org.junit.Assert.assertTrue;
-import com.tourguide.service.RewardsService;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
-import rewardCentral.RewardCentral;
 
 @SpringBootTest()
 public class TestRewardsService {
@@ -26,15 +20,13 @@ public class TestRewardsService {
    * userRewards = user.getUserRewards(); tourGuideService.tracker.stopTracking();
    * assertTrue(userRewards.size() == 1); }
    */
-
-  @Test
-  public void isWithinAttractionProximity() {
-    GpsUtil gpsUtil = new GpsUtil();
-    RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
-    Attraction attraction = gpsUtil.getAttractions().get(0);
-    assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
-  }
-
+  /*
+   * @Test public void isWithinAttractionProximity() { GpsUtil gpsUtil = new
+   * GpsUtil(); RewardsService rewardsService = new RewardsService(gpsUtil, new
+   * RewardCentral()); Attraction attraction = gpsUtil.getAttractions().get(0);
+   * assertTrue(rewardsService.isWithinAttractionProximity(attraction,
+   * attraction)); }
+   */
   /*
    * @Disabled("Needs fixed - can throw ConcurrentModificationException")
    * 

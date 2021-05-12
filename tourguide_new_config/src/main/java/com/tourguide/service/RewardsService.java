@@ -1,12 +1,9 @@
 package com.tourguide.service;
 
-import com.tourguide.model.User;
 import org.springframework.stereotype.Service;
-import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
-import rewardCentral.RewardCentral;
 
 @Service
 public class RewardsService {
@@ -16,14 +13,15 @@ public class RewardsService {
   private int defaultProximityBuffer = 10;
   private int proximityBuffer = defaultProximityBuffer;
   private int attractionProximityRange = 200;
-  private final GpsUtil gpsUtil;
-  private final RewardCentral rewardsCentral;
-
-  public RewardsService(GpsUtil gpsUtil, RewardCentral rewardCentral) {
-    this.gpsUtil = gpsUtil;
-    this.rewardsCentral = rewardCentral;
-  }
-
+  /*
+   * private final GpsUtil gpsUtil;
+   * 
+   * private final RewardCentral rewardsCentral;
+   */
+  /*
+   * public RewardsService(GpsUtil gpsUtil, RewardCentral rewardCentral) {
+   * this.gpsUtil = gpsUtil; this.rewardsCentral = rewardCentral; }
+   */
 
   public void setProximityBuffer(int proximityBuffer) {
     this.proximityBuffer = proximityBuffer;
@@ -53,10 +51,11 @@ public class RewardsService {
     return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
   }
 
-  private int getRewardPoints(Attraction attraction, User user) {
-    return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getId());
-  }
-
+  /*
+   * private int getRewardPoints(Attraction attraction, User user) { return
+   * rewardsCentral.getAttractionRewardPoints(attraction.attractionId,
+   * user.getId()); }
+   */
   public double getDistance(Location loc1, Location loc2) {
     double lat1 = Math.toRadians(loc1.latitude);
     double lon1 = Math.toRadians(loc1.longitude);

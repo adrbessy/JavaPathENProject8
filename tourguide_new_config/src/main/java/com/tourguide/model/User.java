@@ -1,27 +1,25 @@
 package com.tourguide.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import tripPricer.Provider;
 
 @EqualsAndHashCode
 @Getter
 @Setter
 @Entity
+@Table(name = "user", schema = "public")
 public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private UUID id;
+  private Integer id;
 
   private String userName;
 
@@ -30,15 +28,6 @@ public class User {
   private String emailAddress;
 
   private Date latestLocationTimestamp;
-
-  private List<Provider> tripDeals = new ArrayList<>();
-
-  public User(UUID userId, String userName, String phoneNumber, String emailAddress) {
-    this.id = userId;
-    this.userName = userName;
-    this.phoneNumber = phoneNumber;
-    this.emailAddress = emailAddress;
-  }
 
   /*
    * public void addToVisitedLocations(VisitedLocation visitedLocation) {

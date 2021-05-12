@@ -5,14 +5,10 @@ import com.tourguide.service.TourGuideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import gpsUtil.GpsUtil;
 
 
 @RestController
 public class TourGuideController {
-
-  @Autowired
-  public GpsUtil gpsUtil;
 
   @Autowired
   TourGuideService tourGuideService;
@@ -80,10 +76,8 @@ public class TourGuideController {
    * JsonStream.serialize(providers); }
    */
 
-  /*
-   * private User getUser(String userName) { return
-   * tourGuideService.getUser(userName); }
-   */
+
+
 
 
 }
