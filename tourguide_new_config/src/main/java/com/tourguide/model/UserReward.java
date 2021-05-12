@@ -1,40 +1,25 @@
 package com.tourguide.model;
 
-import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import gpsUtil.location.Attraction;
+import gpsUtil.location.VisitedLocation;
 
-@EqualsAndHashCode
-@Getter
-@Setter
-@Entity
 public class UserReward {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-
-  private UUID userId;
-  /*
-   * public final VisitedLocation visitedLocation;
-   * 
-   * public final Attraction attraction;
-   */
+  public final VisitedLocation visitedLocation;
+  public final Attraction attraction;
   private int rewardPoints;
 
-  /*
-   * public UserReward(VisitedLocation visitedLocation, Attraction attraction, int
-   * rewardPoints) { this.visitedLocation = visitedLocation; this.attraction =
-   * attraction; this.rewardPoints = rewardPoints; }
-   * 
-   * public UserReward(VisitedLocation visitedLocation, Attraction attraction) {
-   * this.visitedLocation = visitedLocation; this.attraction = attraction; }
-   */
+  public UserReward(VisitedLocation visitedLocation, Attraction attraction, int rewardPoints) {
+    this.visitedLocation = visitedLocation;
+    this.attraction = attraction;
+    this.rewardPoints = rewardPoints;
+  }
+
+  public UserReward(VisitedLocation visitedLocation, Attraction attraction) {
+    this.visitedLocation = visitedLocation;
+    this.attraction = attraction;
+  }
+
   public void setRewardPoints(int rewardPoints) {
     this.rewardPoints = rewardPoints;
   }

@@ -27,7 +27,7 @@ CREATE SEQUENCE public.visited_location_id_seq;
 CREATE TABLE public.Visited_location (
 		id SMALLINT NOT NULL DEFAULT nextval('public.visited_location_id_seq'),
         user_id uuid NOT NULL,
-        timeVisited TIMESTAMP NOT NULL,
+        timeVisited TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         CONSTRAINT visited_location_pk PRIMARY KEY (id)
 );
 
