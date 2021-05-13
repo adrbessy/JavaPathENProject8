@@ -1,10 +1,12 @@
 package com.tourguide.service;
 
+import com.tourguide.model.AttractionDistance;
 import com.tourguide.model.User;
 import com.tourguide.model.UserReward;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ public class TourGuideService {
   private final TripPricer tripPricer = new TripPricer();
   public final Tracker tracker;
   boolean testMode = true;
+  int numberOfAttractionsNearest = 5;
 
   public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
     this.gpsUtil = gpsUtil;
@@ -81,9 +84,7 @@ public class TourGuideService {
   }
 
   public VisitedLocation trackUserLocation(User user) {
-    System.out.println("user.getUserId() : " + user.getUserId());
     VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
-    System.out.println("visitedLocation in trackUserLocation : " + visitedLocation);
     user.addToVisitedLocations(visitedLocation);
     rewardsService.calculateRewards(user);
     return visitedLocation;
@@ -91,12 +92,18 @@ public class TourGuideService {
 
   public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
     List<Attraction> nearbyAttractions = new ArrayList<>();
+    List<AttractionDistance> attractionDistanceList = new ArrayList<>();
     for (Attraction attraction : gpsUtil.getAttractions()) {
-      if (rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
-        nearbyAttractions.add(attraction);
-      }
+      double distance = rewardsService.getDistance(attraction, visitedLocation.location);
+      AttractionDistance locDist = new AttractionDistance(attraction, distance);
+      attractionDistanceList.add(locDist);
     }
-
+    attractionDistanceList.sort(Comparator.comparing(AttractionDistance::getDistance));
+    List<AttractionDistance> attractionDistanceListFirst5 = attractionDistanceList.subList(0,
+        numberOfAttractionsNearest);
+    nearbyAttractions = attractionDistanceListFirst5.stream()
+        .map(AttractionDistance::getAttraction)
+        .collect(Collectors.toList());
     return nearbyAttractions;
   }
 

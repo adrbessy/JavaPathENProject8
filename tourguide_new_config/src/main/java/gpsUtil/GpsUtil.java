@@ -19,17 +19,7 @@ public class GpsUtil {
     rateLimiter.acquire();
     sleep();
     double longitude = ThreadLocalRandom.current().nextDouble(-180.0D, 180.0D);
-    System.out.println("longitude1 : " + longitude);
-    System.out.println("Double.valueOf(longitude) : " + Double.valueOf(longitude));
-    System.out.println("new Object[] { Double.valueOf(longitude) } : " + new Object[] { Double.valueOf(longitude) });
-    System.out.println("String.format(\"%.6f\", Double.valueOf(longitude) ) : "
-        + String.format("%.6f", Double.valueOf(longitude)));
-    System.out.println("String.format(\"%.6f\", new Object[] { Double.valueOf(longitude) }) : "
-        + String.format("%.6f", new Object[] { Double.valueOf(longitude) }));
-    System.out.println("String.format(Locale.US,\"%.6f\", new Object[] { Double.valueOf(longitude) }) : "
-        + String.format(Locale.US, "%.6f", new Object[] { Double.valueOf(longitude) }));
     longitude = Double.parseDouble(String.format(Locale.US, "%.6f", new Object[] { Double.valueOf(longitude) }));
-    System.out.println("longitude2 : " + longitude);
     double latitude = ThreadLocalRandom.current().nextDouble(-85.05112878D, 85.05112878D);
     latitude = Double.parseDouble(String.format(Locale.US, "%.6f", new Object[] { Double.valueOf(latitude) }));
     VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(latitude, longitude), new Date());
