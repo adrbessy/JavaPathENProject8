@@ -81,7 +81,9 @@ public class TourGuideService {
   }
 
   public VisitedLocation trackUserLocation(User user) {
+    System.out.println("user.getUserId() : " + user.getUserId());
     VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
+    System.out.println("visitedLocation in trackUserLocation : " + visitedLocation);
     user.addToVisitedLocations(visitedLocation);
     rewardsService.calculateRewards(user);
     return visitedLocation;
