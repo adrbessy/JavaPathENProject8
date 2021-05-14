@@ -25,6 +25,12 @@ public class User {
     this.emailAddress = emailAddress;
   }
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[userName=" + userName + ", phoneNumber="
+        + phoneNumber + ", visitedLocations=" + visitedLocations + ", userRewards=" + userRewards + "]";
+  }
+
   public UUID getUserId() {
     return userId;
   }
@@ -70,7 +76,8 @@ public class User {
   }
 
   public void addUserReward(UserReward userReward) {
-    if (userRewards.stream().filter(r -> !r.attraction.attractionName.equals(userReward.attraction)).count() == 0) {
+    if (userRewards.stream().filter(r -> !r.attraction.attractionName.equals(userReward.attraction.attractionName))
+        .count() == 0) {
       userRewards.add(userReward);
     }
   }

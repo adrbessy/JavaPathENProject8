@@ -2,6 +2,7 @@ package com.tourguide.service;
 
 import com.tourguide.model.User;
 import com.tourguide.model.UserReward;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import gpsUtil.GpsUtil;
@@ -36,17 +37,25 @@ public class RewardsService {
 
   public void calculateRewards(User user) {
     List<VisitedLocation> userLocations = user.getVisitedLocations();
+    if (user.getUserName().equals("internalUser0")) {
+      System.out.println("userLocations : " + userLocations);
+    }
     List<Attraction> attractions = gpsUtil.getAttractions();
+    List<UserReward> userRewardtoAddList = new ArrayList<>();
 
     for (VisitedLocation visitedLocation : userLocations) {
       for (Attraction attraction : attractions) {
         if (user.getUserRewards().stream().filter(r -> r.attraction.attractionName.equals(attraction.attractionName))
             .count() == 0) {
           if (nearAttraction(visitedLocation, attraction)) {
-            user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
+            userRewardtoAddList
+                .add(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
           }
         }
       }
+    }
+    for (UserReward userRewardtoAdd : userRewardtoAddList) {
+      user.addUserReward(userRewardtoAdd);
     }
   }
 

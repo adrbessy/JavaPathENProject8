@@ -15,6 +15,11 @@ public class UserReward {
     this.rewardPoints = rewardPoints;
   }
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + "[attraction=" + attraction + "]";
+  }
+
   public UserReward(VisitedLocation visitedLocation, Attraction attraction) {
     this.visitedLocation = visitedLocation;
     this.attraction = attraction;
