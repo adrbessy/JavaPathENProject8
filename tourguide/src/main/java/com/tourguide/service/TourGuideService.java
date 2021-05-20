@@ -34,7 +34,6 @@ public class TourGuideService {
   MicroserviceGpsUtilProxy mGpsUtilProxy;
 
   private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
-  private final GpsUtil gpsUtil;
   private final RewardsService rewardsService;
   private final TripPricer tripPricer = new TripPricer();
   public final Tracker tracker;
@@ -42,7 +41,6 @@ public class TourGuideService {
   int numberOfAttractionsNearest = 5;
 
   public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
-    this.gpsUtil = gpsUtil;
     this.rewardsService = rewardsService;
 
     if (testMode) {
