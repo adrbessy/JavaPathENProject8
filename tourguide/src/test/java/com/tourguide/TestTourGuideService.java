@@ -2,8 +2,8 @@ package com.tourguide;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
-import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.InternalTestHelper;
@@ -102,7 +102,7 @@ public class TestTourGuideService {
 
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
-    List<Attraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
+    List<NearbyAttractions> attractions = tourGuideService.getNearByAttractions(visitedLocation, user);
     tourGuideService.tracker.stopTracking();
 
     assertEquals(5, attractions.size());

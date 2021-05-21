@@ -1,6 +1,7 @@
 package com.tourguide.service;
 
 import com.tourguide.model.AttractionDistance;
+import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
 import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Attraction;
@@ -93,23 +94,43 @@ public class TourGuideService {
     return visitedLocation;
   }
 
-  public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-    List<Attraction> attractions = mGpsUtilProxy.getAttractions();
 
+  public List<NearbyAttractions> getNearByAttractions(VisitedLocation visitedLocation, User user) {
+
+    List<Attraction> attractions = mGpsUtilProxy.getAttractions();
     List<Attraction> nearbyAttractions = new ArrayList<>();
     List<AttractionDistance> attractionDistanceList = new ArrayList<>();
+    List<NearbyAttractions> nearbyAttractionsList = new ArrayList<>();
+
     for (Attraction attraction : attractions) {
       double distance = rewardsService.getDistance(attraction, visitedLocation.location);
       AttractionDistance locDist = new AttractionDistance(attraction, distance);
       attractionDistanceList.add(locDist);
     }
+
     attractionDistanceList.sort(Comparator.comparing(AttractionDistance::getDistance));
+
     List<AttractionDistance> attractionDistanceListFirst5 = attractionDistanceList.subList(0,
         numberOfAttractionsNearest);
+
     nearbyAttractions = attractionDistanceListFirst5.stream()
         .map(AttractionDistance::getAttraction)
         .collect(Collectors.toList());
-    return nearbyAttractions;
+
+    int i = 0;
+    for (Attraction nearbyAttraction : nearbyAttractions) {
+      NearbyAttractions nearbyAttractionObject = new NearbyAttractions(nearbyAttraction.attractionName,
+          nearbyAttraction.latitude,
+          nearbyAttraction.longitude, visitedLocation.location.latitude,
+          visitedLocation.location.longitude,
+          attractionDistanceListFirst5.get(i).distance,
+          rewardsService.getRewardPoints(nearbyAttraction, user));
+      nearbyAttractionsList.add(nearbyAttractionObject);
+      i++;
+    }
+
+
+    return nearbyAttractionsList;
   }
 
   private void addShutDownHook() {

@@ -1,8 +1,8 @@
 package com.tourguide.controller;
 
 import com.jsoniter.output.JsonStream;
+import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
-import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.service.TourGuideService;
@@ -61,6 +61,7 @@ public class TourGuideController {
     return visitedLocation.location;
   }
 
+
   /*
    * Get the closest five tourist attractions to the user - no matter how far away
    * they are.
@@ -75,9 +76,12 @@ public class TourGuideController {
   // The reward points for visiting each Attraction.
   // Note: Attraction reward points can be gathered from RewardsCentral
   @GetMapping("/nearbyAttractions")
-  public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
+  public List<NearbyAttractions> getNearbyAttractions(@RequestParam String userName) {
     VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
-    return tourGuideService.getNearByAttractions(visitedLocation);
+    List<NearbyAttractions> attractionList = tourGuideService.getNearByAttractions(visitedLocation,
+        tourGuideService.getUser(userName));
+
+    return attractionList;
   }
 
   @RequestMapping("/getRewards")

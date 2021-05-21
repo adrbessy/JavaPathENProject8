@@ -11,7 +11,7 @@ public class AttractionDistance {
 
   private Attraction attraction;
 
-  private double distance;
+  public double distance;
 
   public AttractionDistance(Attraction attraction, double distance) {
     this.attraction = attraction;
