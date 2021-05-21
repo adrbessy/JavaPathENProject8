@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import gpsUtil.GpsUtil;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 
@@ -40,7 +39,7 @@ public class TourGuideService {
   boolean testMode = true;
   int numberOfAttractionsNearest = 5;
 
-  public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
+  public TourGuideService(MicroserviceGpsUtilProxy mGpsUtilProxy, RewardsService rewardsService) {
     this.rewardsService = rewardsService;
 
     if (testMode) {

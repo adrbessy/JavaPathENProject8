@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import gpsUtil.GpsUtil;
 import rewardCentral.RewardCentral;
 
 @Service
@@ -27,7 +26,7 @@ public class RewardsService {
   private int attractionProximityRange = 200;
   private final RewardCentral rewardsCentral;
 
-  public RewardsService(GpsUtil gpsUtil, RewardCentral rewardCentral) {
+  public RewardsService(MicroserviceGpsUtilProxy mGpsUtilProxy, RewardCentral rewardCentral) {
     this.rewardsCentral = rewardCentral;
   }
 

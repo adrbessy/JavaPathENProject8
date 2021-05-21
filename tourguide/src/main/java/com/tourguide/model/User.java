@@ -27,7 +27,7 @@ public class User {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "[userName=" + userName + ", phoneNumber="
+    return getClass().getSimpleName() + "[userId= " + userId + ", userName= " + userName + ", phoneNumber="
         + phoneNumber + ", visitedLocations=" + visitedLocations + ", userRewards=" + userRewards + "]";
   }
 

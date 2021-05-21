@@ -17,8 +17,6 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import gpsUtil.GpsUtil;
-import rewardCentral.RewardCentral;
 
 @SpringBootTest()
 public class TestRewardsService {
@@ -48,8 +46,9 @@ public class TestRewardsService {
 
   @Test
   public void isWithinAttractionProximity() {
-    GpsUtil gpsUtil = new GpsUtil();
-    RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+    // GpsUtil gpsUtil = new GpsUtil();
+    // RewardsService rewardsService = new RewardsService(gpsUtil, new
+    // RewardCentral());
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
     assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
   }
