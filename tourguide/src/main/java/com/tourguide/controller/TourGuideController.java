@@ -2,10 +2,16 @@ package com.tourguide.controller;
 
 import com.jsoniter.output.JsonStream;
 import com.tourguide.model.User;
+import com.tourguide.model.gpsUtil.Attraction;
+import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.service.TourGuideService;
+import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +19,8 @@ import tripPricer.Provider;
 
 @RestController
 public class TourGuideController {
+
+  private static final Logger logger = LogManager.getLogger(TourGuideController.class);
 
   @Autowired
   TourGuideService tourGuideService;
@@ -22,15 +30,42 @@ public class TourGuideController {
     return "Greetings from TourGuide!";
   }
 
-  @RequestMapping("/getLocation")
-  public String getLocation(@RequestParam String userName) {
-    VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
-    return JsonStream.serialize(visitedLocation.location);
+  /**
+   * Read - Get all users
+   * 
+   * @return - An Iterable object of users full filled
+   */
+  @GetMapping("/users")
+  public List<User> getUsers() {
+    List<User> userList = new ArrayList<>();
+    try {
+      logger.info("Get request with the endpoint 'users'");
+      userList = tourGuideService.getAllUsers();
+      logger.info(
+          "response following the GET on the endpoint 'users'.");
+    } catch (Exception exception) {
+      logger.error("Error in the TourGuideController in the method getUsers :"
+          + exception.getMessage());
+    }
+    return userList;
   }
 
-  // TODO: Change this method to no longer return a List of Attractions.
-  // Instead: Get the closest five tourist attractions to the user - no matter how
-  // far away they are.
+  /**
+   * Read - Get the current location of one user
+   * 
+   * @return - A Location object (latitude and longitude)
+   */
+  @GetMapping("/location")
+  public Location getLocation(@RequestParam String userName) {
+    VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+    return visitedLocation.location;
+  }
+
+  /*
+   * Get the closest five tourist attractions to the user - no matter how far away
+   * they are.
+   */
+
   // Return a new JSON object that contains:
   // Name of Tourist attraction,
   // Tourist attractions lat/long,
@@ -39,15 +74,15 @@ public class TourGuideController {
   // attractions.
   // The reward points for visiting each Attraction.
   // Note: Attraction reward points can be gathered from RewardsCentral
-  @RequestMapping("/getNearbyAttractions")
-  public String getNearbyAttractions(@RequestParam String userName) {
-    VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
-    return JsonStream.serialize(tourGuideService.getNearByAttractions(visitedLocation));
+  @GetMapping("/nearbyAttractions")
+  public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
+    VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+    return tourGuideService.getNearByAttractions(visitedLocation);
   }
 
   @RequestMapping("/getRewards")
   public String getRewards(@RequestParam String userName) {
-    return JsonStream.serialize(tourGuideService.getUserRewards(getUser(userName)));
+    return JsonStream.serialize(tourGuideService.getUserRewards(tourGuideService.getUser(userName)));
   }
 
   @RequestMapping("/getAllCurrentLocations")
@@ -70,13 +105,8 @@ public class TourGuideController {
 
   @RequestMapping("/getTripDeals")
   public String getTripDeals(@RequestParam String userName) {
-    List<Provider> providers = tourGuideService.getTripDeals(getUser(userName));
+    List<Provider> providers = tourGuideService.getTripDeals(tourGuideService.getUser(userName));
     return JsonStream.serialize(providers);
   }
-
-  private User getUser(String userName) {
-    return tourGuideService.getUser(userName);
-  }
-
 
 }
