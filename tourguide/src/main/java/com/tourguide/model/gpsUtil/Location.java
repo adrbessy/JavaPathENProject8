@@ -13,7 +13,7 @@ public class Location {
 
   @Override
   public String toString() {
-    return getClass().getSimpleName() + "[latitude=" + latitude + "longitude="
+    return getClass().getSimpleName() + "[latitude=" + latitude + ", longitude="
         + longitude + "]";
   }
 

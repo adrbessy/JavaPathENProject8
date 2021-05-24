@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import com.tourguide.model.User;
 import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Attraction;
-import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.InternalTestHelper;
@@ -46,9 +45,6 @@ public class TestRewardsService {
 
   @Test
   public void isWithinAttractionProximity() {
-    // GpsUtil gpsUtil = new GpsUtil();
-    // RewardsService rewardsService = new RewardsService(gpsUtil, new
-    // RewardCentral());
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
     assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
   }
@@ -57,22 +53,8 @@ public class TestRewardsService {
   @Test
   public void nearAllAttractions() {
     rewardsService.setProximityBuffer(Integer.MAX_VALUE);
-
-    InternalTestHelper.setInternalUserNumber(1);
-
-    String userName = "testUser";
-    String phone = "000";
-    String email = userName + "@tourGuide.com";
-    User user = new User(UUID.randomUUID(), userName, phone, email);
-
-    List<Attraction> attractions = mGpsUtilProxy.getAttractions();
-    for (Attraction attraction : attractions) {
-      user.addToVisitedLocations(new VisitedLocation(user.getUserId(),
-          new Location(attraction.latitude, attraction.longitude), null));
-    }
-
-    rewardsService.calculateRewards(user);
-    List<UserReward> userRewards = tourGuideService.getUserRewards(user);
+    rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
+    List<UserReward> userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));
     tourGuideService.tracker.stopTracking();
     assertEquals(mGpsUtilProxy.getAttractions().size(), userRewards.size());
   }
