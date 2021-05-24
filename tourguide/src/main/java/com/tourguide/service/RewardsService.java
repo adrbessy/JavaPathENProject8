@@ -7,7 +7,6 @@ import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.proxies.MicroserviceRewardCentralProxy;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,23 +43,18 @@ public class RewardsService {
   }
 
   public void calculateRewards(User user) {
-
     List<VisitedLocation> userLocations = user.getVisitedLocations();
     List<Attraction> attractions = mGpsUtilProxy.getAttractions();
-    List<UserReward> userRewardtoAddList = new ArrayList<>();
 
     for (VisitedLocation visitedLocation : userLocations) {
       for (Attraction attraction : attractions) {
-        if (user.getUserRewards().stream().filter(r -> r.attraction.attractionName.equals(attraction.attractionName))
-            .count() == 0) {
+        if (user.getUserRewards().stream().noneMatch(
+            r -> r.attraction.attractionName.equals(attraction.attractionName))) {
           if (nearAttraction(visitedLocation, attraction)) {
             user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
           }
         }
       }
-    }
-    for (UserReward userRewardtoAdd : userRewardtoAddList) {
-      user.addUserReward(userRewardtoAdd);
     }
 
   }
