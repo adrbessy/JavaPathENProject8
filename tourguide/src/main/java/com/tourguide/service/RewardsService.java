@@ -45,7 +45,6 @@ public class RewardsService {
   public void calculateRewards(User user) {
     List<VisitedLocation> userLocations = user.getVisitedLocations();
     List<Attraction> attractions = mGpsUtilProxy.getAttractions();
-
     for (VisitedLocation visitedLocation : userLocations) {
       for (Attraction attraction : attractions) {
         if (user.getUserRewards().stream().noneMatch(

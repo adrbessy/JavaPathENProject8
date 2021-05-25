@@ -1,11 +1,12 @@
 package com.tourguide.model;
 
 import com.tourguide.model.gpsUtil.VisitedLocation;
+import com.tourguide.model.tripPricer.Provider;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import tripPricer.Provider;
+
 
 public class User {
   private final UUID userId;

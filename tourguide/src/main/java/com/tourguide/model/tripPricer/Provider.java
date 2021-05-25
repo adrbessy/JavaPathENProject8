@@ -1,8 +1,9 @@
-package tripPricer;
+package com.tourguide.model.tripPricer;
 
 import java.util.UUID;
 
 public class Provider {
+
   public final String name;
 
   public final double price;

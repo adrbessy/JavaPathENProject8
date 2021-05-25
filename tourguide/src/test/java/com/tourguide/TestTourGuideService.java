@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
 import com.tourguide.model.gpsUtil.VisitedLocation;
+import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.RewardsService;
@@ -14,7 +15,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import tripPricer.Provider;
+
 
 @SpringBootTest()
 public class TestTourGuideService {

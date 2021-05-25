@@ -7,7 +7,9 @@ import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
+import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
+import com.tourguide.proxies.MicroserviceTripPricerProxy;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -24,18 +26,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tripPricer.Provider;
-import tripPricer.TripPricer;
 
 @Service
 public class TourGuideService {
 
   @Autowired
   MicroserviceGpsUtilProxy mGpsUtilProxy;
+  @Autowired
+  MicroserviceTripPricerProxy TripPricerProxy;
 
   private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
   private final RewardsService rewardsService;
-  private final TripPricer tripPricer = new TripPricer();
+  // private final TripPricer tripPricer = new TripPricer();
   public final Tracker tracker;
   boolean testMode = true;
   int numberOfAttractionsNearest = 5;
@@ -79,7 +81,7 @@ public class TourGuideService {
 
   public List<Provider> getTripDeals(User user) {
     int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
-    List<Provider> providers = tripPricer.getPrice(tripPricerApiKey, user.getUserId(),
+    List<Provider> providers = TripPricerProxy.getPrice(tripPricerApiKey, user.getUserId(),
         user.getUserPreferences().getNumberOfAdults(),
         user.getUserPreferences().getNumberOfChildren(), user.getUserPreferences().getTripDuration(),
         cumulatativeRewardPoints);

@@ -5,6 +5,7 @@ import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
+import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.service.TourGuideService;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tripPricer.Provider;
+
 
 @RestController
 public class TourGuideController {
