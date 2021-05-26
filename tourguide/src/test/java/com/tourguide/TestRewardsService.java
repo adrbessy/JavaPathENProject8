@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import com.tourguide.model.User;
 import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Attraction;
-import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.InternalTestHelper;
@@ -14,12 +13,15 @@ import com.tourguide.service.TourGuideService;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest()
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestRewardsService {
 
   @Autowired
@@ -37,10 +39,7 @@ public class TestRewardsService {
   }
 
   @Test
-  public void userGetRewards() {
-
-    // InternalTestHelper.setInternalUserNumber(0);
-
+  public void a_userGetRewards() {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     System.out.println("user : " + user);
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
@@ -56,30 +55,18 @@ public class TestRewardsService {
   }
 
   @Test
-  public void isWithinAttractionProximity() {
+  public void b_isWithinAttractionProximity() {
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
     assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
   }
 
 
   @Test
-  public void nearAllAttractions() {
+  public void c_nearAllAttractions() {
     rewardsService.setProximityBuffer(Integer.MAX_VALUE);
-    // InternalTestHelper.setInternalUserNumber(1);
 
-    String userName = "testUser";
-    String phone = "000";
-    String email = userName + "@tourGuide.com";
-    User user2 = new User(UUID.randomUUID(), userName, phone, email);
-
-    List<Attraction> attractions = mGpsUtilProxy.getAttractions();
-    for (Attraction attraction : attractions) {
-      user2.addToVisitedLocations(new VisitedLocation(user2.getUserId(),
-          new Location(attraction.latitude, attraction.longitude), null));
-    }
-
-    rewardsService.calculateRewards(user2);
-    List<UserReward> userRewards = tourGuideService.getUserRewards(user2);
+    rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
+    List<UserReward> userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));
     tourGuideService.tracker.stopTracking();
     assertEquals(mGpsUtilProxy.getAttractions().size(), userRewards.size());
   }

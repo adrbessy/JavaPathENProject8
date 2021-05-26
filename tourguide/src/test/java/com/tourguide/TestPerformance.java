@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,9 +54,10 @@ public class TestPerformance {
    */
 
   @Test
+  @Disabled
   public void highVolumeTrackLocation() {
 
-    InternalTestHelper.setInternalUserNumber(100);
+    InternalTestHelper.setInternalUserNumber(100000);
 
     List<User> allUsers = new ArrayList<>();
     allUsers = tourGuideService.getAllUsers();
@@ -78,16 +80,25 @@ public class TestPerformance {
 
     // Users should be incremented up to 100,000, and test finishes within 20
     // minutes
-    InternalTestHelper.setInternalUserNumber(100);
+    InternalTestHelper.setInternalUserNumber(100000);
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
 
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
     List<User> allUsers = new ArrayList<>();
     allUsers = tourGuideService.getAllUsers();
-    allUsers.forEach(u -> u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date())));
 
-    allUsers.forEach(u -> rewardsService.calculateRewards(u));
+    for (User u : allUsers) {
+      u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date()));
+      rewardsService.calculateRewards(u);
+    }
+
+    /*
+     * allUsers.forEach(u -> u.addToVisitedLocations(new
+     * VisitedLocation(u.getUserId(), attraction, new Date())));
+     * System.out.println("hello !"); allUsers.forEach(u ->
+     * rewardsService.calculateRewards(u));
+     */
 
     for (User user : allUsers) {
       assertTrue(user.getUserRewards().size() > 0);

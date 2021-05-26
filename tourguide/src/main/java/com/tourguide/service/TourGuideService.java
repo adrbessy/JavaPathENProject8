@@ -37,7 +37,6 @@ public class TourGuideService {
 
   private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
   private final RewardsService rewardsService;
-  // private final TripPricer tripPricer = new TripPricer();
   public final Tracker tracker;
   boolean testMode = true;
   int numberOfAttractionsNearest = 5;
@@ -85,6 +84,7 @@ public class TourGuideService {
         user.getUserPreferences().getNumberOfAdults(),
         user.getUserPreferences().getNumberOfChildren(), user.getUserPreferences().getTripDuration(),
         cumulatativeRewardPoints);
+
     user.setTripDeals(providers);
     return providers;
   }
