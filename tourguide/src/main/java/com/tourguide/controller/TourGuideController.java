@@ -1,6 +1,5 @@
 package com.tourguide.controller;
 
-import com.jsoniter.output.JsonStream;
 import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
 import com.tourguide.model.UserReward;
@@ -17,7 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,8 +34,12 @@ public class TourGuideController {
   @Autowired
   MicroserviceGpsUtilProxy mGpsUtilProxy;
 
-  @RequestMapping("/")
+  /**
+   * @return string
+   */
+  @GetMapping("/")
   public String index() {
+    logger.info("Redirecting to greeting message");
     return "Greetings from TourGuide!";
   }
 
@@ -50,7 +52,7 @@ public class TourGuideController {
   public List<User> getUsers() {
     List<User> userList = new ArrayList<>();
     try {
-      logger.info("Get request with the endpoint 'users'");
+      logger.info("Get request with the endpoint 'users'.");
       userList = tourGuideService.getAllUsers();
       logger.info(
           "response following the GET on the endpoint 'users'.");
@@ -69,7 +71,16 @@ public class TourGuideController {
    */
   @GetMapping("/location")
   public Location getLocation(@RequestParam String userName) {
-    VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+    VisitedLocation visitedLocation = null;
+    try {
+      logger.info("Get request with the endpoint 'location'.");
+      visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+      logger.info(
+          "response following the GET on the endpoint 'location'.");
+    } catch (Exception exception) {
+      logger.error("Error in the TourGuideController in the method getLocation :"
+          + exception.getMessage());
+    }
     return visitedLocation.location;
   }
 
@@ -87,10 +98,18 @@ public class TourGuideController {
    */
   @GetMapping("/nearbyAttractions")
   public List<NearbyAttractions> getNearbyAttractions(@RequestParam String userName) {
-    VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
-    List<NearbyAttractions> attractionList = tourGuideService.getNearByAttractions(visitedLocation,
-        tourGuideService.getUser(userName));
-
+    List<NearbyAttractions> attractionList = null;
+    try {
+      logger.info("Get request with the endpoint 'nearbyAttractions'.");
+      VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+      attractionList = tourGuideService.getNearByAttractions(visitedLocation,
+          tourGuideService.getUser(userName));
+      logger.info(
+          "response following the GET on the endpoint 'nearbyAttractions'.");
+    } catch (Exception exception) {
+      logger.error("Error in the TourGuideController in the method getNearbyAttractions :"
+          + exception.getMessage());
+    }
     return attractionList;
   }
 
@@ -118,10 +137,17 @@ public class TourGuideController {
     return tourGuideService.getAllCurrentLocations();
   }
 
-  @RequestMapping("/getTripDeals")
-  public String getTripDeals(@RequestParam String userName) {
+  /*
+   * Get the trip deals
+   * 
+   * @param userName A user name
+   * 
+   * @return - A List of trip deals
+   */
+  @GetMapping("/tripDeals")
+  public List<Provider> getTripDeals(@RequestParam String userName) {
     List<Provider> providers = tourGuideService.getTripDeals(tourGuideService.getUser(userName));
-    return JsonStream.serialize(providers);
+    return providers;
   }
 
 }
