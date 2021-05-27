@@ -96,7 +96,6 @@ public class TourGuideService {
     return visitedLocation;
   }
 
-
   public List<NearbyAttractions> getNearByAttractions(VisitedLocation visitedLocation, User user) {
 
     List<Attraction> attractions = mGpsUtilProxy.getAttractions();
@@ -131,7 +130,6 @@ public class TourGuideService {
       i++;
     }
 
-
     return nearbyAttractionsList;
   }
 
@@ -143,6 +141,28 @@ public class TourGuideService {
       }
     });
   }
+
+
+  /**
+   * Get a list of every users most recent location
+   *
+   * @return list of users recent locations
+   */
+  public Map<String, Location> getAllCurrentLocations() {
+
+    List<User> usersList = getAllUsers();
+    Map<String, Location> usersLocations = new HashMap<>();
+
+    usersList.forEach(user -> {
+
+      if (user.getVisitedLocations().size() > 0) {
+        usersLocations.put(user.getUserId().toString(), user.getLastVisitedLocation().location);
+      }
+    });
+
+    return usersLocations;
+  }
+
 
   /**********************************************************************************
    * 
