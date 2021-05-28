@@ -10,6 +10,7 @@ import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.proxies.MicroserviceTripPricerProxy;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -115,5 +116,34 @@ public class TestTourGuideServiceImpl {
    * 
    * assertEquals(1, providers.size()); }
    */
+
+  @Test
+  public void getAllCurrentLocations() {
+    InternalTestHelper.setInternalUserNumber(0);
+    TourGuideService tourGuideService = new TourGuideService(mGpsUtilProxyMock, rewardsServiceMock);
+
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+    User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
+
+    Location location = new Location(0.1, 0.2);
+    VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location,
+        new Date());
+    user.addToVisitedLocations(visitedLocation);
+
+    Location location2 = new Location(0.4, 0.9);
+    VisitedLocation visitedLocation2 = new VisitedLocation(UUID.randomUUID(), location2,
+        new Date());
+    user2.addToVisitedLocations(visitedLocation2);
+
+    tourGuideService.addUser(user);
+    tourGuideService.addUser(user2);
+
+    Map<String, Location> allCurrentLocations = tourGuideService.getAllCurrentLocations();
+
+    tourGuideService.tracker.stopTracking();
+
+    assertEquals(allCurrentLocations.get(user.getUserId().toString()), location);
+    assertEquals(allCurrentLocations.get(user2.getUserId().toString()), location2);
+  }
 
 }
