@@ -3,7 +3,6 @@ package com.tourguide.service;
 import com.tourguide.model.AttractionDistance;
 import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
-import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
@@ -52,10 +51,6 @@ public class TourGuideService {
     }
     tracker = new Tracker(this);
     addShutDownHook();
-  }
-
-  public List<UserReward> getUserRewards(User user) {
-    return user.getUserRewards();
   }
 
   public VisitedLocation getUserLocation(User user) {

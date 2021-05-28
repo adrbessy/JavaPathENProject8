@@ -125,7 +125,7 @@ public class TourGuideController {
     List<UserReward> rewards = null;
     try {
       logger.info("Get request with the endpoint 'rewards'.");
-      rewards = tourGuideService.getUserRewards(tourGuideService.getUser(userName));
+      rewards = rewardsService.getUserRewards(tourGuideService.getUser(userName));
       logger.info(
           "response following the GET on the endpoint 'nearbyAttractions'.");
     } catch (Exception exception) {

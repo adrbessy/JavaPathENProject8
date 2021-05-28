@@ -66,7 +66,7 @@ public class TestRewardsService {
     rewardsService.setProximityBuffer(Integer.MAX_VALUE);
 
     rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
-    List<UserReward> userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));
+    List<UserReward> userRewards = rewardsService.getUserRewards(tourGuideService.getAllUsers().get(0));
     tourGuideService.tracker.stopTracking();
     assertEquals(mGpsUtilProxy.getAttractions().size(), userRewards.size());
   }

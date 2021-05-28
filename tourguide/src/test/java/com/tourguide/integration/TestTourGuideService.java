@@ -1,4 +1,4 @@
-package com.tourguide;
+package com.tourguide.integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +12,6 @@ import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +30,6 @@ public class TestTourGuideService {
   RewardsService rewardsService;
 
   @Test
-  @Disabled
   public void getUserLocation() {
     InternalTestHelper.setInternalUserNumber(0);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
@@ -41,7 +39,6 @@ public class TestTourGuideService {
   }
 
   @Test
-  @Disabled
   public void addUser() {
     InternalTestHelper.setInternalUserNumber(0);
 
@@ -61,7 +58,6 @@ public class TestTourGuideService {
   }
 
   @Test
-  @Disabled
   public void getAllUsers() {
     InternalTestHelper.setInternalUserNumber(0);
     TourGuideService tourGuideService = new TourGuideService(mGpsUtilProxy, rewardsService);
@@ -81,7 +77,6 @@ public class TestTourGuideService {
   }
 
   @Test
-  @Disabled
   public void trackUser() {
     InternalTestHelper.setInternalUserNumber(0);
 
@@ -94,7 +89,6 @@ public class TestTourGuideService {
   }
 
   @Test
-  @Disabled
   public void getNearbyAttractions() {
     InternalTestHelper.setInternalUserNumber(0);
 
