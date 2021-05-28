@@ -1,4 +1,4 @@
-package com.tourguide;
+package com.tourguide.integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,15 +13,17 @@ import com.tourguide.service.TourGuideService;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
 @SpringBootTest()
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(OrderAnnotation.class)
 public class TestRewardsService {
 
   @Autowired
@@ -39,15 +41,12 @@ public class TestRewardsService {
   }
 
   @Test
-  public void a_userGetRewards() {
+  @Order(1)
+  public void userGetRewards() {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    System.out.println("user : " + user);
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
-    System.out.println("attraction : " + attraction);
     user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date()));
-    System.out.println("user : " + user);
     rewardsService.calculateRewards(user);
-    System.out.println("user : " + user);
     List<UserReward> userRewards = user.getUserRewards();
     tourGuideService.tracker.stopTracking();
     System.out.println("userRewards.size() : " + userRewards.size());
@@ -55,16 +54,17 @@ public class TestRewardsService {
   }
 
   @Test
-  public void b_isWithinAttractionProximity() {
+  @Order(2)
+  public void isWithinAttractionProximity() {
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
     assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
   }
 
 
   @Test
-  public void c_nearAllAttractions() {
+  @Order(3)
+  public void nearAllAttractions() {
     rewardsService.setProximityBuffer(Integer.MAX_VALUE);
-
     rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
     List<UserReward> userRewards = rewardsService.getUserRewards(tourGuideService.getAllUsers().get(0));
     tourGuideService.tracker.stopTracking();

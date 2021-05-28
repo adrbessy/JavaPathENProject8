@@ -1,4 +1,4 @@
-package com.tourguide;
+package com.tourguide.integration;
 
 import static org.junit.Assert.assertTrue;
 import com.tourguide.model.User;

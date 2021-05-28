@@ -27,9 +27,6 @@ public class RewardsService {
   private int proximityBuffer = defaultProximityBuffer;
   private int attractionProximityRange = 200;
 
-  /**
-   * Initialization of services
-   */
   public RewardsService() {
 
   }
