@@ -122,7 +122,17 @@ public class TourGuideController {
    */
   @GetMapping("/rewards")
   public List<UserReward> getRewards(@RequestParam String userName) {
-    return tourGuideService.getUserRewards(tourGuideService.getUser(userName));
+    List<UserReward> rewards = null;
+    try {
+      logger.info("Get request with the endpoint 'rewards'.");
+      rewards = tourGuideService.getUserRewards(tourGuideService.getUser(userName));
+      logger.info(
+          "response following the GET on the endpoint 'nearbyAttractions'.");
+    } catch (Exception exception) {
+      logger.error("Error in the TourGuideController in the method getRewards :"
+          + exception.getMessage());
+    }
+    return rewards;
   }
 
   /**
@@ -134,7 +144,17 @@ public class TourGuideController {
    */
   @GetMapping("/allCurrentLocations")
   public Map<String, Location> getAllCurrentLocations() {
-    return tourGuideService.getAllCurrentLocations();
+    Map<String, Location> allCurrentLocations = null;
+    try {
+      logger.info("Get request with the endpoint 'allCurrentLocations'.");
+      allCurrentLocations = tourGuideService.getAllCurrentLocations();
+      logger.info(
+          "response following the GET on the endpoint 'allCurrentLocations'.");
+    } catch (Exception exception) {
+      logger.error("Error in the TourGuideController in the method getAllCurrentLocations :"
+          + exception.getMessage());
+    }
+    return allCurrentLocations;
   }
 
   /*
@@ -146,7 +166,16 @@ public class TourGuideController {
    */
   @GetMapping("/tripDeals")
   public List<Provider> getTripDeals(@RequestParam String userName) {
-    List<Provider> providers = tourGuideService.getTripDeals(tourGuideService.getUser(userName));
+    List<Provider> providers = null;
+    try {
+      logger.info("Get request with the endpoint 'tripDeals'.");
+      providers = tourGuideService.getTripDeals(tourGuideService.getUser(userName));
+      logger.info(
+          "response following the GET on the endpoint 'tripDeals'.");
+    } catch (Exception exception) {
+      logger.error("Error in the TourGuideController in the method getTripDeals :"
+          + exception.getMessage());
+    }
     return providers;
   }
 
