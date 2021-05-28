@@ -1,8 +1,12 @@
 package com.tourguide.model;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@EqualsAndHashCode
+@Getter
+@Setter
 public class NearbyAttractions {
 
   private String attractionName;

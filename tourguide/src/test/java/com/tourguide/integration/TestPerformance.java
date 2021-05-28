@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,7 +53,6 @@ public class TestPerformance {
    */
 
   @Test
-  @Disabled
   public void highVolumeTrackLocation() {
 
     InternalTestHelper.setInternalUserNumber(100000);

@@ -14,16 +14,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest()
-@TestMethodOrder(OrderAnnotation.class)
 public class TestRewardsService {
 
   @Autowired
@@ -41,20 +37,18 @@ public class TestRewardsService {
   }
 
   @Test
-  @Order(1)
   public void userGetRewards() {
+    rewardsService.setProximityBuffer(10);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
     user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date()));
     rewardsService.calculateRewards(user);
     List<UserReward> userRewards = user.getUserRewards();
     tourGuideService.tracker.stopTracking();
-    System.out.println("userRewards.size() : " + userRewards.size());
     assertTrue(userRewards.size() == 1);
   }
 
   @Test
-  @Order(2)
   public void isWithinAttractionProximity() {
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
     assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
@@ -62,7 +56,6 @@ public class TestRewardsService {
 
 
   @Test
-  @Order(3)
   public void nearAllAttractions() {
     rewardsService.setProximityBuffer(Integer.MAX_VALUE);
     rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
