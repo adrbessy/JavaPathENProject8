@@ -33,18 +33,38 @@ You can run the application in two different ways:
 
 2/ Or import the code, unzip it, open the console, go to the folder that contains the pom.xml file, then execute the below command to launch the application.
 
+```bash
 mvn spring-boot:run 
-
+```
 
 ### Docker deploiement
 
-Go to the folder that contains the Dockerfile, and then type:
+Generate a jar file for each microservice with:
 
-docker build -t name_of_image .
+```bash
+mvn package
+```
+
+
+Go to the folder that contains the Dockerfile, and then to build an image type:
+
+```bash
+docker build -t tourguide:0.0.1 .
+```
+
+Then go to the respective folder of each microservice and to build the images type:
+
+```bash
+docker build -t gps_util:0.0.1 .
+docker build -t reward_central:0.0.1 .
+docker build -t trip_pricer:0.0.1 .
+```
 
 Then to deploy all TourGuide microservices, type :
 
+```bash
 docker-compose up -d
+```
 
 
 ### API calls (URI, parameters)
@@ -113,6 +133,7 @@ The app has unit tests written.
 
 To run the tests from maven, go to the folder that contains the pom.xml file and execute the below command.
 
+```bash
 mvn test
-
+```
 

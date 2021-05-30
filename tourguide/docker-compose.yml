@@ -1,0 +1,25 @@
+version: '3'
+services:
+  tourguide:
+    image: tourguide:0.0.1
+    depends_on:
+      - tourguide_gpsUtil
+      - tourguide_rewardCentral
+      - tourguide_tripPricer
+    ports:
+      - "9005:9005"
+    
+  tourguide_gpsUtil:
+    image: gps_util:0.0.1
+    ports:
+      - "9006:9006"
+
+  tourguide_rewardCentral:
+    image: reward_central:0.0.1
+    ports:
+      - "9007:9007"
+
+  tourguide_tripPricer:
+    image: trip_pricer:0.0.1
+    ports:
+      - "9008:9008"
