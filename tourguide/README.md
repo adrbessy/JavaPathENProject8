@@ -1,3 +1,5 @@
+<img src="https://img.shields.io/badge/java-%23ED8B00.svg?&style=for-the-badge&logo=java&logoColor=white"/> * * *  <img src="https://img.shields.io/badge/spring%20-%236DB33F.svg?&style=for-the-badge&logo=spring&logoColor=white"/>  * * *  <img src="https://img.shields.io/badge/docker%20-%230db7ed.svg?&style=for-the-badge&logo=docker&logoColor=white"/>
+
 # Tour Guide
 An application to know the nearest attractions and to earn discounts on hotels and attractions.
 This app uses Java to run.
@@ -70,62 +72,17 @@ docker-compose up -d
 ### API calls (URI, parameters)
 GET
 
-http://localhost:9004/bids
+http://localhost:9005/
 
-http://localhost:9004/curvePoints
+http://localhost:9005/location?userName=internalUser78
 
-http://localhost:9004/ratings
+http://localhost:9005/nearbyAttractions?userName=internalUser78
 
-http://localhost:9004/rules
+http://localhost:9005/rewards?userName=internalUser78
 
-http://localhost:9004/trades
+http://localhost:9005/allCurrentLocations
 
-http://localhost:9004/users
-
-
-POST
-
-http://localhost:9004/authenticate
-
-http://localhost:9004/bid
-
-http://localhost:9004/curvePoint
-
-http://localhost:9004/rating
-
-http://localhost:9004/rule
-
-http://localhost:9004/trade
-
-
-PUT
-
-http://localhost:9004/bid/2
-
-http://localhost:9004/curvePoint/2
-
-http://localhost:9004/rating/2
-
-http://localhost:9004/rule/2
-
-http://localhost:9004/trade/2
-
-http://localhost:9004/user/14
-
-
-DELETE
-
-http://localhost:9004/bid?id=3
-
-http://localhost:9004/curvePoint?id=1
-
-http://localhost:9004/rating?id=1
-
-http://localhost:9004/rule?id=1
-
-http://localhost:9004/trade?id=1
-
-http://localhost:9004/user?id=3
+http://localhost:9005/tripDeals?userName=internalUser78
 
 
 ### Testing
