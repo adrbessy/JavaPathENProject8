@@ -59,6 +59,21 @@ public class TourGuideService {
     return visitedLocation;
   }
 
+
+  public List<Map<String, Location>> getCurrentLocationAllUsers() {
+    Map<String, Location> usersLocations = new HashMap<>();
+    List<Map<String, Location>> AllUserLocation = new ArrayList<>();
+    List<User> allUsers = new ArrayList<>();
+    allUsers = getAllUsers();
+    for (User user : allUsers) {
+      VisitedLocation visitedLocation = trackUserLocation(user);
+      usersLocations.put(user.getUserId().toString(), visitedLocation.location);
+      AllUserLocation.add(usersLocations);
+    }
+    return AllUserLocation;
+  }
+
+
   public User getUser(String userName) {
     return internalUserMap.get(userName);
   }
@@ -139,11 +154,11 @@ public class TourGuideService {
 
 
   /**
-   * Get a list of every users most recent location
+   * Get a list of every users most recent location saved in the history
    *
    * @return list of users recent locations
    */
-  public Map<String, Location> getAllCurrentLocations() {
+  public Map<String, Location> getLastSavedLocationAllUsers() {
 
     List<User> usersList = getAllUsers();
     Map<String, Location> usersLocations = new HashMap<>();

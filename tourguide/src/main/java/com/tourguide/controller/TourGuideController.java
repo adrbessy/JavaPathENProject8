@@ -84,6 +84,26 @@ public class TourGuideController {
     return visitedLocation.location;
   }
 
+  /**
+   * Read - Get the current location of all users
+   * 
+   * @return - A List of Map <user id, Location>
+   */
+  @GetMapping("/currentLocationAllUsers")
+  public List<Map<String, Location>> getCurrentLocationAllUsers() {
+    List<Map<String, Location>> currentLocationAllUsersList = null;
+    try {
+      logger.info("Get request with the endpoint 'locationAllUsers'.");
+      currentLocationAllUsersList = tourGuideService.getCurrentLocationAllUsers();
+      logger.info(
+          "response following the GET on the endpoint 'locationAllUsers'.");
+    } catch (Exception exception) {
+      logger.error("Error in the TourGuideController in the method getLocationAllUsers :"
+          + exception.getMessage());
+    }
+    return currentLocationAllUsersList;
+  }
+
 
   /*
    * Get the closest five tourist attractions to the user - no matter how far away
@@ -136,22 +156,22 @@ public class TourGuideController {
   }
 
   /**
-   * Read - Get the current location (from their stored location history, not
-   * their current location using gpsUtil) of all users.
+   * Read - Get the last location (from their stored location history, not their
+   * current location using gpsUtil) of all users.
    * 
    * @return - A Map similar to { "019b04a9-067a-4c76-8817-ee75088c3822":
    *         {"longitude":-48.188821,"latitude":74.84371} ...}
    */
-  @GetMapping("/allCurrentLocations")
-  public Map<String, Location> getAllCurrentLocations() {
+  @GetMapping("/lastSavedLocationAllUsers")
+  public Map<String, Location> getLastSavedLocationAllUsers() {
     Map<String, Location> allCurrentLocations = null;
     try {
-      logger.info("Get request with the endpoint 'allCurrentLocations'.");
-      allCurrentLocations = tourGuideService.getAllCurrentLocations();
+      logger.info("Get request with the endpoint 'allLastLocations'.");
+      allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
       logger.info(
-          "response following the GET on the endpoint 'allCurrentLocations'.");
+          "response following the GET on the endpoint 'allLastLocations'.");
     } catch (Exception exception) {
-      logger.error("Error in the TourGuideController in the method getAllCurrentLocations :"
+      logger.error("Error in the TourGuideController in the method getAllLastLocations :"
           + exception.getMessage());
     }
     return allCurrentLocations;

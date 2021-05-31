@@ -138,7 +138,7 @@ public class TestTourGuideServiceImpl {
     tourGuideService.addUser(user);
     tourGuideService.addUser(user2);
 
-    Map<String, Location> allCurrentLocations = tourGuideService.getAllCurrentLocations();
+    Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
 
     tourGuideService.tracker.stopTracking();
 
