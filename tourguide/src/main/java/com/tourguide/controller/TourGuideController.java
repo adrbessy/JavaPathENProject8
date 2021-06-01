@@ -2,6 +2,7 @@ package com.tourguide.controller;
 
 import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
+import com.tourguide.model.UserPreferences;
 import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
@@ -16,6 +17,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -197,6 +201,20 @@ public class TourGuideController {
           + exception.getMessage());
     }
     return providers;
+  }
+
+  /**
+   * Update an user preferences
+   * 
+   * @param userName        A user name
+   * @param userPreferences A userPreferences object with modifications
+   * @return The updated userPreferences object
+   */
+  @PutMapping("/userPreferences/{userName}")
+  public UserPreferences updateUserPreferences(@PathVariable("userName") final String userName,
+      @RequestBody UserPreferences userPreferences) {
+    UserPreferences userPreferencesToUpdate = tourGuideService.updateUserPreferences(userName, userPreferences);
+    return userPreferencesToUpdate;
   }
 
 }

@@ -1,8 +1,10 @@
 package com.tourguide.service;
 
+import com.tourguide.exception.NotFoundException;
 import com.tourguide.model.AttractionDistance;
 import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
+import com.tourguide.model.UserPreferences;
 import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
@@ -21,6 +23,8 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.money.Monetary;
+import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +79,10 @@ public class TourGuideService {
 
 
   public User getUser(String userName) {
+    if (!internalUserMap.containsKey(userName)) {
+      logger.error("This username does not exist" + userName);
+      throw new NotFoundException(userName);
+    }
     return internalUserMap.get(userName);
   }
 
@@ -171,6 +179,42 @@ public class TourGuideService {
     });
 
     return usersLocations;
+  }
+
+  /**
+   * Update user preferences from a username and a userPreferences object
+   * 
+   * @param userName        A user name
+   * @param userPreferences the user preferences
+   * @return the updated user preferences
+   */
+  public UserPreferences updateUserPreferences(String userName, UserPreferences userPreferences) {
+    User userToUpdate = getUser(userName);
+    if (userPreferences.getAttractionProximity() != Integer.MAX_VALUE) {
+      userToUpdate.getUserPreferences().setAttractionProximity(userPreferences.getAttractionProximity());
+    }
+    if (userPreferences.getCurrency() != Monetary.getCurrency("USD")) {
+      userToUpdate.getUserPreferences().setCurrency(userPreferences.getCurrency());
+    }
+    if (userPreferences.getLowerPricePoint() != Money.of(0, Monetary.getCurrency("USD"))) {
+      userToUpdate.getUserPreferences().setLowerPricePoint(userPreferences.getLowerPricePoint());
+    }
+    if (userPreferences.getHighPricePoint() != Money.of(Integer.MAX_VALUE, Monetary.getCurrency("USD"))) {
+      userToUpdate.getUserPreferences().setHighPricePoint(userPreferences.getHighPricePoint());
+    }
+    if (userPreferences.getTripDuration() != 1) {
+      userToUpdate.getUserPreferences().setTripDuration(userPreferences.getTripDuration());
+    }
+    if (userPreferences.getTicketQuantity() != 1) {
+      userToUpdate.getUserPreferences().setTicketQuantity(userPreferences.getTicketQuantity());
+    }
+    if (userPreferences.getNumberOfAdults() != 1) {
+      userToUpdate.getUserPreferences().setNumberOfAdults(userPreferences.getNumberOfAdults());
+    }
+    if (userPreferences.getNumberOfChildren() != 0) {
+      userToUpdate.getUserPreferences().setNumberOfChildren(userPreferences.getNumberOfChildren());
+    }
+    return userToUpdate.getUserPreferences();
   }
 
 
