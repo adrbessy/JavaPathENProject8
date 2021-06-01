@@ -102,7 +102,6 @@ public class TourGuideService {
         user.getUserPreferences().getNumberOfAdults(),
         user.getUserPreferences().getNumberOfChildren(), user.getUserPreferences().getTripDuration(),
         cumulatativeRewardPoints);
-
     user.setTripDeals(providers);
     return providers;
   }

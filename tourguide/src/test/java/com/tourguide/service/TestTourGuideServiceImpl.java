@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import com.tourguide.model.User;
+import com.tourguide.model.UserPreferences;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
@@ -144,6 +145,19 @@ public class TestTourGuideServiceImpl {
 
     assertEquals(allCurrentLocations.get(user.getUserId().toString()), location);
     assertEquals(allCurrentLocations.get(user2.getUserId().toString()), location2);
+  }
+
+  @Test
+  public void updateUserPreferences() {
+    InternalTestHelper.setInternalUserNumber(1);
+    String userName = "internalUser0";
+    UserPreferences userPreferences = new UserPreferences();
+    userPreferences.setAttractionProximity(50);
+    userPreferences.setTripDuration(2);
+    userPreferences.setNumberOfChildren(3);
+
+    UserPreferences result = tourGuideService.updateUserPreferences(userName, userPreferences);
+    assertEquals(result, userPreferences);
   }
 
 }

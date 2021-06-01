@@ -10,7 +10,6 @@ import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -54,57 +53,39 @@ public class TourGuideController {
    */
   @GetMapping("/users")
   public List<User> getUsers() {
-    List<User> userList = new ArrayList<>();
-    try {
-      logger.info("Get request with the endpoint 'users'.");
-      userList = tourGuideService.getAllUsers();
-      logger.info(
-          "response following the GET on the endpoint 'users'.");
-    } catch (Exception exception) {
-      logger.error("Error in the TourGuideController in the method getUsers :"
-          + exception.getMessage());
-    }
+    logger.info("Get request with the endpoint 'users'.");
+    List<User> userList = tourGuideService.getAllUsers();
+    logger.info(
+        "response following the GET on the endpoint 'users'.");
     return userList;
   }
 
   /**
-   * Read - Get the current location of one user
+   * Get the current location of one user
    * 
    * @param userName A user name
    * @return - A Location object (latitude and longitude)
    */
   @GetMapping("/location")
   public Location getLocation(@RequestParam String userName) {
-    VisitedLocation visitedLocation = null;
-    try {
-      logger.info("Get request with the endpoint 'location'.");
-      visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
-      logger.info(
-          "response following the GET on the endpoint 'location'.");
-    } catch (Exception exception) {
-      logger.error("Error in the TourGuideController in the method getLocation :"
-          + exception.getMessage());
-    }
+    logger.info("Get request with the endpoint 'location'.");
+    VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+    logger.info(
+        "response following the GET on the endpoint 'location'.");
     return visitedLocation.location;
   }
 
   /**
-   * Read - Get the current location of all users
+   * Get the current location of all users
    * 
    * @return - A List of Map <user id, Location>
    */
   @GetMapping("/currentLocationAllUsers")
   public List<Map<String, Location>> getCurrentLocationAllUsers() {
-    List<Map<String, Location>> currentLocationAllUsersList = null;
-    try {
-      logger.info("Get request with the endpoint 'locationAllUsers'.");
-      currentLocationAllUsersList = tourGuideService.getCurrentLocationAllUsers();
-      logger.info(
-          "response following the GET on the endpoint 'locationAllUsers'.");
-    } catch (Exception exception) {
-      logger.error("Error in the TourGuideController in the method getLocationAllUsers :"
-          + exception.getMessage());
-    }
+    logger.info("Get request with the endpoint 'locationAllUsers'.");
+    List<Map<String, Location>> currentLocationAllUsersList = tourGuideService.getCurrentLocationAllUsers();
+    logger.info(
+        "response following the GET on the endpoint 'locationAllUsers'.");
     return currentLocationAllUsersList;
   }
 
@@ -122,18 +103,12 @@ public class TourGuideController {
    */
   @GetMapping("/nearbyAttractions")
   public List<NearbyAttractions> getNearbyAttractions(@RequestParam String userName) {
-    List<NearbyAttractions> attractionList = null;
-    try {
-      logger.info("Get request with the endpoint 'nearbyAttractions'.");
-      VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
-      attractionList = tourGuideService.getNearByAttractions(visitedLocation,
-          tourGuideService.getUser(userName));
-      logger.info(
-          "response following the GET on the endpoint 'nearbyAttractions'.");
-    } catch (Exception exception) {
-      logger.error("Error in the TourGuideController in the method getNearbyAttractions :"
-          + exception.getMessage());
-    }
+    logger.info("Get request with the endpoint 'nearbyAttractions'.");
+    VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+    List<NearbyAttractions> attractionList = tourGuideService.getNearByAttractions(visitedLocation,
+        tourGuideService.getUser(userName));
+    logger.info(
+        "response following the GET on the endpoint 'nearbyAttractions'.");
     return attractionList;
   }
 
@@ -146,38 +121,26 @@ public class TourGuideController {
    */
   @GetMapping("/rewards")
   public List<UserReward> getRewards(@RequestParam String userName) {
-    List<UserReward> rewards = null;
-    try {
-      logger.info("Get request with the endpoint 'rewards'.");
-      rewards = rewardsService.getUserRewards(tourGuideService.getUser(userName));
-      logger.info(
-          "response following the GET on the endpoint 'nearbyAttractions'.");
-    } catch (Exception exception) {
-      logger.error("Error in the TourGuideController in the method getRewards :"
-          + exception.getMessage());
-    }
+    logger.info("Get request with the endpoint 'rewards'.");
+    List<UserReward> rewards = rewardsService.getUserRewards(tourGuideService.getUser(userName));
+    logger.info(
+        "response following the GET on the endpoint 'nearbyAttractions'.");
     return rewards;
   }
 
   /**
-   * Read - Get the last location (from their stored location history, not their
-   * current location using gpsUtil) of all users.
+   * Get the last location (from their stored location history, not their current
+   * location using gpsUtil) of all users.
    * 
    * @return - A Map similar to { "019b04a9-067a-4c76-8817-ee75088c3822":
    *         {"longitude":-48.188821,"latitude":74.84371} ...}
    */
   @GetMapping("/lastSavedLocationAllUsers")
   public Map<String, Location> getLastSavedLocationAllUsers() {
-    Map<String, Location> allCurrentLocations = null;
-    try {
-      logger.info("Get request with the endpoint 'allLastLocations'.");
-      allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
-      logger.info(
-          "response following the GET on the endpoint 'allLastLocations'.");
-    } catch (Exception exception) {
-      logger.error("Error in the TourGuideController in the method getAllLastLocations :"
-          + exception.getMessage());
-    }
+    logger.info("Get request with the endpoint 'allLastLocations'.");
+    Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
+    logger.info(
+        "response following the GET on the endpoint 'allLastLocations'.");
     return allCurrentLocations;
   }
 
@@ -190,16 +153,10 @@ public class TourGuideController {
    */
   @GetMapping("/tripDeals")
   public List<Provider> getTripDeals(@RequestParam String userName) {
-    List<Provider> providers = null;
-    try {
-      logger.info("Get request with the endpoint 'tripDeals'.");
-      providers = tourGuideService.getTripDeals(tourGuideService.getUser(userName));
-      logger.info(
-          "response following the GET on the endpoint 'tripDeals'.");
-    } catch (Exception exception) {
-      logger.error("Error in the TourGuideController in the method getTripDeals :"
-          + exception.getMessage());
-    }
+    logger.info("Get request with the endpoint 'tripDeals'.");
+    List<Provider> providers = tourGuideService.getTripDeals(tourGuideService.getUser(userName));
+    logger.info(
+        "response following the GET on the endpoint 'tripDeals'.");
     return providers;
   }
 
@@ -213,7 +170,10 @@ public class TourGuideController {
   @PutMapping("/userPreferences/{userName}")
   public UserPreferences updateUserPreferences(@PathVariable("userName") final String userName,
       @RequestBody UserPreferences userPreferences) {
+    logger.info("Put request with the endpoint 'userPreferences/{userName}'.");
     UserPreferences userPreferencesToUpdate = tourGuideService.updateUserPreferences(userName, userPreferences);
+    logger.info(
+        "response following the PUT on the endpoint 'userPreferences/{userName}'.");
     return userPreferencesToUpdate;
   }
 

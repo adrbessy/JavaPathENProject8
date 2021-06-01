@@ -99,4 +99,21 @@ public class TestTourGuideController {
     mockMvc.perform(get("/tripDeals?userName=jon")).andExpect(status().isOk());
   }
 
+  /*
+   * @Test public void testUpdateUserPreferences() throws Exception { User user =
+   * new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+   * user.getUserPreferences().setNumberOfChildren(3);
+   * 
+   * when(tourGuideServiceMock.updateUserPreferences(user.getUserName(),
+   * user.getUserPreferences())) .thenReturn(user.getUserPreferences());
+   * 
+   * MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+   * .put("/userPreferences/" + user.getUserPreferences())
+   * .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.
+   * APPLICATION_JSON).characterEncoding("UTF-8") .content(new
+   * ObjectMapper().writeValueAsString(user.getUserPreferences()));
+   * this.mockMvc.perform(builder).andExpect(MockMvcResultMatchers.status().isOk()
+   * ); }
+   */
+
 }

@@ -14,6 +14,7 @@ public class TestUser {
   String userName;
   String phoneNumber;
   String emailAddress;
+  UserPreferences userPreferences = new UserPreferences();
 
   @BeforeEach
   private void setUp() {
@@ -23,11 +24,13 @@ public class TestUser {
     emailAddress = "afqgg@mail.fr";
     user = new User(userId, userName,
         phoneNumber, emailAddress);
+    user.setUserPreferences(userPreferences);
   }
 
   @Test
   public void testToString() {
-    String expected = "User[userId= " + userId + ", userName= " + userName + ", phoneNumber="
+    String expected = "User[userId= " + userId + ", userName= " + userName + ", userPreferences= "
+        + userPreferences + ", phoneNumber="
         + phoneNumber + ", visitedLocations=" + user.getVisitedLocations() + ", userRewards=" + user.getUserRewards()
         + "]";
     Assert.assertEquals(expected, user.toString());

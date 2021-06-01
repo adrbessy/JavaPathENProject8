@@ -33,4 +33,7 @@ public class UserPreferences {
 
   private int numberOfChildren = 0;
 
+  public UserPreferences() {
+  }
+
 }
