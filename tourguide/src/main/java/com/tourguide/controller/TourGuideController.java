@@ -135,8 +135,8 @@ public class TourGuideController {
    * @return - A Map similar to { "019b04a9-067a-4c76-8817-ee75088c3822":
    *         {"longitude":-48.188821,"latitude":74.84371} ...}
    */
-  @GetMapping("/lastSavedLocationAllUsers")
-  public Map<String, Location> getLastSavedLocationAllUsers() {
+  @GetMapping("/lastSavedLocationForAllUsers")
+  public Map<String, Location> getLastSavedLocationForAllUsers() {
     logger.info("Get request with the endpoint 'allLastLocations'.");
     Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
     logger.info(

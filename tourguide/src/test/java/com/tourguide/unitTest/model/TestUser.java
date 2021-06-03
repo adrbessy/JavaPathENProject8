@@ -1,5 +1,7 @@
-package com.tourguide.model;
+package com.tourguide.unitTest.model;
 
+import com.tourguide.model.User;
+import com.tourguide.model.UserPreferences;
 import java.util.UUID;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;

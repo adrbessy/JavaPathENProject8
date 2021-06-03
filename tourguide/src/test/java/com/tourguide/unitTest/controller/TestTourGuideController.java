@@ -1,4 +1,4 @@
-package com.tourguide.controller;
+package com.tourguide.unitTest.controller;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -82,10 +82,10 @@ public class TestTourGuideController {
   }
 
   @Test
-  public void testGetAllCurrentLocations() throws Exception {
+  public void testGetLastSavedLocationForAllUsers() throws Exception {
     Map<String, Location> allCurrentLocations = null;
     when(tourGuideServiceMock.getLastSavedLocationAllUsers()).thenReturn(allCurrentLocations);
-    mockMvc.perform(get("/lastSavedLocationAllUsers")).andExpect(status().isOk());
+    mockMvc.perform(get("/lastSavedLocationForAllUsers")).andExpect(status().isOk());
   }
 
   @Test

@@ -37,6 +37,8 @@ public class TourGuideService {
   MicroserviceGpsUtilProxy mGpsUtilProxy;
   @Autowired
   MicroserviceTripPricerProxy TripPricerProxy;
+  @Autowired
+  LocationService locationService;
 
   private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
   private final RewardsService rewardsService;
@@ -59,7 +61,7 @@ public class TourGuideService {
 
   public VisitedLocation getUserLocation(User user) {
     VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ? user.getLastVisitedLocation()
-        : trackUserLocation(user);
+        : locationService.trackUserLocation(user);
     return visitedLocation;
   }
 
@@ -67,10 +69,8 @@ public class TourGuideService {
   public List<Map<String, Location>> getCurrentLocationAllUsers() {
     Map<String, Location> usersLocations = new HashMap<>();
     List<Map<String, Location>> AllUserLocation = new ArrayList<>();
-    List<User> allUsers = new ArrayList<>();
-    allUsers = getAllUsers();
-    for (User user : allUsers) {
-      VisitedLocation visitedLocation = trackUserLocation(user);
+    for (User user : getAllUsers()) {
+      VisitedLocation visitedLocation = locationService.trackUserLocation(user);
       usersLocations.put(user.getUserId().toString(), visitedLocation.location);
       AllUserLocation.add(usersLocations);
     }
@@ -106,17 +106,11 @@ public class TourGuideService {
     return providers;
   }
 
-  public VisitedLocation trackUserLocation(User user) {
-    VisitedLocation visitedLocation = mGpsUtilProxy.getUserLocation(user.getUserId());
-    user.addToVisitedLocations(visitedLocation);
-    rewardsService.calculateRewards(user);
-    return visitedLocation;
-  }
+
 
   public List<NearbyAttractions> getNearByAttractions(VisitedLocation visitedLocation, User user) {
 
     List<Attraction> attractions = mGpsUtilProxy.getAttractions();
-    List<Attraction> nearbyAttractions = new ArrayList<>();
     List<AttractionDistance> attractionDistanceList = new ArrayList<>();
     List<NearbyAttractions> nearbyAttractionsList = new ArrayList<>();
 
@@ -131,7 +125,7 @@ public class TourGuideService {
     List<AttractionDistance> attractionDistanceListFirst5 = attractionDistanceList.subList(0,
         numberOfAttractionsNearest);
 
-    nearbyAttractions = attractionDistanceListFirst5.stream()
+    List<Attraction> nearbyAttractions = attractionDistanceListFirst5.stream()
         .map(AttractionDistance::getAttraction)
         .collect(Collectors.toList());
 
@@ -223,6 +217,7 @@ public class TourGuideService {
    * 
    **********************************************************************************/
   private static final String tripPricerApiKey = "test-server-api-key";
+  private static final Random RANDOM = new Random();
   // Database connection will be used for external users, but for testing purposes
   // internal users are provided and stored in memory
   private final Map<String, User> internalUserMap = new HashMap<>();
@@ -241,22 +236,17 @@ public class TourGuideService {
   }
 
   private void generateUserLocationHistory(User user) {
+    double leftLimitLong = -180;
+    double rightLimitLong = 180;
+    double leftLimitLat = -85.05112878;
+    double rightLimitLat = 85.05112878;
     IntStream.range(0, 3).forEach(i -> {
       user.addToVisitedLocations(new VisitedLocation(user.getUserId(),
-          new Location(generateRandomLatitude(), generateRandomLongitude()), getRandomTime()));
+          new Location(
+              leftLimitLat + RANDOM.nextDouble() * (rightLimitLat - leftLimitLat),
+              leftLimitLong + RANDOM.nextDouble() * (rightLimitLong - leftLimitLong)),
+          getRandomTime()));
     });
-  }
-
-  private double generateRandomLongitude() {
-    double leftLimit = -180;
-    double rightLimit = 180;
-    return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
-  }
-
-  private double generateRandomLatitude() {
-    double leftLimit = -85.05112878;
-    double rightLimit = 85.05112878;
-    return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
   }
 
   private Date getRandomTime() {

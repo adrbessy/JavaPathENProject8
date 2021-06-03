@@ -1,14 +1,19 @@
-package com.tourguide.service;
+package com.tourguide.unitTest.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import com.tourguide.model.User;
 import com.tourguide.model.UserPreferences;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.proxies.MicroserviceTripPricerProxy;
+import com.tourguide.service.InternalTestHelper;
+import com.tourguide.service.LocationService;
+import com.tourguide.service.RewardsService;
+import com.tourguide.service.TourGuideService;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest()
 public class TestTourGuideServiceImpl {
@@ -33,6 +39,9 @@ public class TestTourGuideServiceImpl {
   @Mock
   private RewardsService rewardsServiceMock;
 
+  @MockBean
+  LocationService locationServiceMock;
+
   @Test
   public void testGetUserLocation() {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
@@ -45,19 +54,22 @@ public class TestTourGuideServiceImpl {
     assertThat(result).isEqualTo(visitedLocation);
   }
 
-  /*
-   * @Test public void testGetUserLocationIfNoVisitedLocation() { User user = new
-   * User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com"); Location location
-   * = new Location(0.1, 0.2); VisitedLocation visitedLocation = new
-   * VisitedLocation(UUID.randomUUID(), location, new Date());
-   * 
-   * when(mGpsUtilProxyMock.getUserLocation(user.getUserId())).thenReturn(
-   * visitedLocation);
-   * doNothing().when(rewardsServiceMock).calculateRewards(user);
-   * 
-   * VisitedLocation result = tourGuideService.getUserLocation(user);
-   * assertThat(result).isEqualTo(visitedLocation); }
-   */
+
+  @Test
+  public void testGetUserLocationIfNoVisitedLocation() {
+    InternalTestHelper.setInternalUserNumber(0);
+
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+    Location location = new Location(0.1, 0.2);
+    VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location, new Date());
+
+    when(locationServiceMock.trackUserLocation(user)).thenReturn(
+        visitedLocation);
+
+    VisitedLocation result = tourGuideService.getUserLocation(user);
+    assertThat(result).isEqualTo(visitedLocation);
+  }
+
 
   @Test
   public void testAddUserAndGetUser() {
@@ -150,7 +162,8 @@ public class TestTourGuideServiceImpl {
   @Test
   public void updateUserPreferences() {
     InternalTestHelper.setInternalUserNumber(1);
-    String userName = "internalUser0";
+    TourGuideService tourGuideService = new TourGuideService(mGpsUtilProxyMock, rewardsServiceMock);
+    String userName = tourGuideService.getAllUsers().get(0).getUserName();
     UserPreferences userPreferences = new UserPreferences();
     userPreferences.setAttractionProximity(50);
     userPreferences.setTripDuration(2);

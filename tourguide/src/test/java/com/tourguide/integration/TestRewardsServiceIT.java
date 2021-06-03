@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest()
-public class TestRewardsService {
+public class TestRewardsServiceIT {
 
   @Autowired
   MicroserviceGpsUtilProxy mGpsUtilProxy;
@@ -61,6 +61,7 @@ public class TestRewardsService {
     rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
     List<UserReward> userRewards = rewardsService.getUserRewards(tourGuideService.getAllUsers().get(0));
     tourGuideService.tracker.stopTracking();
+    System.out.println("userRewards.size() : " + userRewards.size());
     assertEquals(mGpsUtilProxy.getAttractions().size(), userRewards.size());
   }
 

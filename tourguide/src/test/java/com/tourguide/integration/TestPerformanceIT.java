@@ -6,11 +6,10 @@ import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.InternalTestHelper;
+import com.tourguide.service.LocationService;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest()
-public class TestPerformance {
+public class TestPerformanceIT {
 
   @Autowired
   MicroserviceGpsUtilProxy mGpsUtilProxy;
@@ -28,6 +27,9 @@ public class TestPerformance {
 
   @Autowired
   TourGuideService tourGuideService;
+
+  @Autowired
+  LocationService locationService;
 
   /*
    * A note on performance improvements:
@@ -57,13 +59,10 @@ public class TestPerformance {
 
     InternalTestHelper.setInternalUserNumber(100000);
 
-    List<User> allUsers = new ArrayList<>();
-    allUsers = tourGuideService.getAllUsers();
-
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
-    for (User user : allUsers) {
-      tourGuideService.trackUserLocation(user);
+    for (User user : tourGuideService.getAllUsers()) {
+      locationService.trackUserLocation(user);
     }
     stopWatch.stop();
     tourGuideService.tracker.stopTracking();
@@ -83,22 +82,13 @@ public class TestPerformance {
     stopWatch.start();
 
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
-    List<User> allUsers = new ArrayList<>();
-    allUsers = tourGuideService.getAllUsers();
 
-    for (User u : allUsers) {
+    for (User u : tourGuideService.getAllUsers()) {
       u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date()));
       rewardsService.calculateRewards(u);
     }
 
-    /*
-     * allUsers.forEach(u -> u.addToVisitedLocations(new
-     * VisitedLocation(u.getUserId(), attraction, new Date())));
-     * System.out.println("hello !"); allUsers.forEach(u ->
-     * rewardsService.calculateRewards(u));
-     */
-
-    for (User user : allUsers) {
+    for (User user : tourGuideService.getAllUsers()) {
       assertTrue(user.getUserRewards().size() > 0);
     }
     stopWatch.stop();

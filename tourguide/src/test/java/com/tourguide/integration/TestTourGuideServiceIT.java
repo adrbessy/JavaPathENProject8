@@ -8,6 +8,7 @@ import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.InternalTestHelper;
+import com.tourguide.service.LocationService;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
 import java.util.List;
@@ -18,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest()
-public class TestTourGuideService {
+public class TestTourGuideServiceIT {
 
   @Autowired
   MicroserviceGpsUtilProxy mGpsUtilProxy;
@@ -29,11 +30,14 @@ public class TestTourGuideService {
   @Autowired
   RewardsService rewardsService;
 
+  @Autowired
+  LocationService locationService;
+
   @Test
   public void getTrackUserLocation() {
     InternalTestHelper.setInternalUserNumber(0);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+    VisitedLocation visitedLocation = locationService.trackUserLocation(user);
     tourGuideService.tracker.stopTracking();
     assertTrue(visitedLocation.userId.equals(user.getUserId()));
   }
@@ -43,7 +47,7 @@ public class TestTourGuideService {
     InternalTestHelper.setInternalUserNumber(0);
 
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+    VisitedLocation visitedLocation = locationService.trackUserLocation(user);
 
     tourGuideService.tracker.stopTracking();
 
@@ -55,7 +59,7 @@ public class TestTourGuideService {
     InternalTestHelper.setInternalUserNumber(0);
 
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+    VisitedLocation visitedLocation = locationService.trackUserLocation(user);
     List<NearbyAttractions> attractions = tourGuideService.getNearByAttractions(visitedLocation, user);
     tourGuideService.tracker.stopTracking();
 

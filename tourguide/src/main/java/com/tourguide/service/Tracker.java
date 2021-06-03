@@ -8,8 +8,13 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class Tracker extends Thread {
+
+  @Autowired
+  LocationService locationService;
+
   private Logger logger = LoggerFactory.getLogger(Tracker.class);
   private static final long trackingPollingInterval = TimeUnit.MINUTES.toSeconds(5);
   private final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -42,7 +47,7 @@ public class Tracker extends Thread {
       List<User> users = tourGuideService.getAllUsers();
       logger.debug("Begin Tracker. Tracking " + users.size() + " users.");
       stopWatch.start();
-      users.forEach(u -> tourGuideService.trackUserLocation(u));
+      users.forEach(u -> locationService.trackUserLocation(u));
       stopWatch.stop();
       logger.debug("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
       stopWatch.reset();
