@@ -9,6 +9,7 @@ import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.LocationService;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.UserService;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
@@ -30,6 +31,9 @@ public class TestPerformanceIT {
 
   @Autowired
   LocationService locationService;
+
+  @Autowired
+  UserService userService;
 
   /*
    * A note on performance improvements:
@@ -61,7 +65,7 @@ public class TestPerformanceIT {
 
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
-    for (User user : tourGuideService.getAllUsers()) {
+    for (User user : userService.getAllUsers()) {
       locationService.trackUserLocation(user);
     }
     stopWatch.stop();
@@ -83,12 +87,12 @@ public class TestPerformanceIT {
 
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
 
-    for (User u : tourGuideService.getAllUsers()) {
+    for (User u : userService.getAllUsers()) {
       u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date()));
       rewardsService.calculateRewards(u);
     }
 
-    for (User user : tourGuideService.getAllUsers()) {
+    for (User user : userService.getAllUsers()) {
       assertTrue(user.getUserRewards().size() > 0);
     }
     stopWatch.stop();

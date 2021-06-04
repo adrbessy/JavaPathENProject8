@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
+import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
@@ -11,7 +12,10 @@ import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.LocationService;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.UserService;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,9 @@ public class TestTourGuideServiceIT {
 
   @Autowired
   LocationService locationService;
+
+  @Autowired
+  UserService userService;
 
   @Test
   public void getTrackUserLocation() {
@@ -77,6 +84,56 @@ public class TestTourGuideServiceIT {
     tourGuideService.tracker.stopTracking();
 
     assertEquals(5, providers.size());
+  }
+
+
+  @Test
+  public void getAllCurrentLocations() {
+    InternalTestHelper.setInternalUserNumber(0);
+    // TourGuideService tourGuideService = new TourGuideService(mGpsUtilProxy,
+    // rewardsService);
+
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+    User user2 = new User(UUID.randomUUID(), "jon2", "000",
+        "jon2@tourGuide.com");
+
+    Location location = new Location(0.1, 0.2);
+    VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location, new Date());
+    user.addToVisitedLocations(visitedLocation);
+
+    Location location2 = new Location(0.4, 0.9);
+    VisitedLocation visitedLocation2 = new VisitedLocation(UUID.randomUUID(), location2, new Date());
+    user2.addToVisitedLocations(visitedLocation2);
+
+    tourGuideService.addUser(user);
+    tourGuideService.addUser(user2);
+
+    Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
+
+    tourGuideService.tracker.stopTracking();
+
+    assertEquals(allCurrentLocations.get(user.getUserId().toString()), location);
+    assertEquals(allCurrentLocations.get(user2.getUserId().toString()),
+        location2);
+  }
+
+  @Test
+  public void testAddUserAndGetUser() {
+    InternalTestHelper.setInternalUserNumber(0);
+
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+    User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
+
+    tourGuideService.addUser(user);
+    tourGuideService.addUser(user2);
+
+    User retrivedUser = userService.getUser(user.getUserName());
+    User retrivedUser2 = userService.getUser(user2.getUserName());
+
+    tourGuideService.tracker.stopTracking();
+
+    assertEquals(user, retrivedUser);
+    assertEquals(user2, retrivedUser2);
   }
 
 

@@ -11,6 +11,7 @@ import com.tourguide.service.AttractionService;
 import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.UserService;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +35,9 @@ public class TestRewardsServiceIT {
 
   @Autowired
   AttractionService attractionService;
+
+  @Autowired
+  UserService userService;
 
   @BeforeAll
   public static void setUp() {
@@ -62,8 +66,8 @@ public class TestRewardsServiceIT {
   @Test
   public void nearAllAttractions() {
     attractionService.setProximityBuffer(Integer.MAX_VALUE);
-    rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
-    List<UserReward> userRewards = rewardsService.getUserRewards(tourGuideService.getAllUsers().get(0));
+    rewardsService.calculateRewards(userService.getAllUsers().get(0));
+    List<UserReward> userRewards = rewardsService.getUserRewards(userService.getAllUsers().get(0));
     tourGuideService.tracker.stopTracking();
     System.out.println("userRewards.size() : " + userRewards.size());
     assertEquals(mGpsUtilProxy.getAttractions().size(), userRewards.size());

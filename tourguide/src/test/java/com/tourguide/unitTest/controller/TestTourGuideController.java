@@ -11,6 +11,7 @@ import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.UserService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,10 +37,13 @@ public class TestTourGuideController {
   @MockBean
   private RewardsService rewardServiceMock;
 
+  @MockBean
+  private UserService userServiceMock;
+
   @Test
   public void testGetUsers() throws Exception {
     List<User> userList = new ArrayList<>();
-    when(tourGuideServiceMock.getAllUsers()).thenReturn(userList);
+    when(userServiceMock.getAllUsers()).thenReturn(userList);
     mockMvc.perform(get("/users")).andExpect(status().isOk());
   }
 
@@ -51,7 +55,7 @@ public class TestTourGuideController {
     VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location,
         new Date());
 
-    when(tourGuideServiceMock.getUser(username)).thenReturn(user);
+    when(userServiceMock.getUser(username)).thenReturn(user);
     when(tourGuideServiceMock.getUserLocation(user)).thenReturn(visitedLocation);
     mockMvc.perform(get("/location?userName=jon")).andExpect(status().isOk());
   }
@@ -65,7 +69,7 @@ public class TestTourGuideController {
         new Date());
     List<NearbyAttractions> attractionList = null;
 
-    when(tourGuideServiceMock.getUser(username)).thenReturn(user);
+    when(userServiceMock.getUser(username)).thenReturn(user);
     when(tourGuideServiceMock.getNearByAttractions(visitedLocation, user)).thenReturn(attractionList);
     mockMvc.perform(get("/nearbyAttractions?userName=jon")).andExpect(status().isOk());
   }
@@ -76,7 +80,7 @@ public class TestTourGuideController {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     List<UserReward> rewards = null;
 
-    when(tourGuideServiceMock.getUser(username)).thenReturn(user);
+    when(userServiceMock.getUser(username)).thenReturn(user);
     when(rewardServiceMock.getUserRewards(user)).thenReturn(rewards);
     mockMvc.perform(get("/rewards?userName=jon")).andExpect(status().isOk());
   }
@@ -94,7 +98,7 @@ public class TestTourGuideController {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     List<Provider> providers = null;
 
-    when(tourGuideServiceMock.getUser(username)).thenReturn(user);
+    when(userServiceMock.getUser(username)).thenReturn(user);
     when(tourGuideServiceMock.getTripDeals(user)).thenReturn(providers);
     mockMvc.perform(get("/tripDeals?userName=jon")).andExpect(status().isOk());
   }

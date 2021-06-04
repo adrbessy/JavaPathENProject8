@@ -2,7 +2,6 @@ package com.tourguide.unitTest.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
@@ -17,6 +16,7 @@ import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.LocationService;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.UserService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +49,9 @@ public class TestTourGuideServiceImpl {
   @MockBean
   LocationService locationServiceMock;
 
+  @MockBean
+  UserService userServiceMock;
+
   @Test
   public void testGetUserLocation() {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
@@ -77,44 +80,26 @@ public class TestTourGuideServiceImpl {
     assertThat(result).isEqualTo(visitedLocation);
   }
 
-
   @Test
-  public void testAddUserAndGetUser() {
+  public void testGetCurrentLocationForAllUsers() {
     InternalTestHelper.setInternalUserNumber(0);
 
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
+    List<User> userList = new ArrayList<>();
+    userList.add(user);
+    Location location = new Location(0.1, 0.2);
+    VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location, new Date());
 
-    tourGuideService.addUser(user);
-    tourGuideService.addUser(user2);
+    when(userServiceMock.getAllUsers()).thenReturn(
+        userList);
+    when(locationServiceMock.trackUserLocation(user)).thenReturn(
+        visitedLocation);
 
-    User retrivedUser = tourGuideService.getUser(user.getUserName());
-    User retrivedUser2 = tourGuideService.getUser(user2.getUserName());
-
-    tourGuideService.tracker.stopTracking();
-
-    assertEquals(user, retrivedUser);
-    assertEquals(user2, retrivedUser2);
+    List<Map<String, Location>> result = tourGuideService.getCurrentLocationForAllUsers();
+    assertThat(result.get(0).get(user.getUserId().toString())).isEqualTo(visitedLocation.location);
   }
 
-  @Test
-  public void getAllUsers() {
-    InternalTestHelper.setInternalUserNumber(0);
-    TourGuideService tourGuideService = new TourGuideService(mGpsUtilProxyMock, rewardsServiceMock);
 
-    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
-
-    tourGuideService.addUser(user);
-    tourGuideService.addUser(user2);
-
-    List<User> allUsers = tourGuideService.getAllUsers();
-
-    tourGuideService.tracker.stopTracking();
-
-    assertTrue(allUsers.contains(user));
-    assertTrue(allUsers.contains(user2));
-  }
 
   /*
    * @Test public void getTripDeals() {
@@ -174,47 +159,22 @@ public class TestTourGuideServiceImpl {
     assertThat(result.get(0).getAttractionName()).isEqualTo(attraction.getAttractionName());
   }
 
-  @Test
-  public void getAllCurrentLocations() {
-    InternalTestHelper.setInternalUserNumber(0);
-    TourGuideService tourGuideService = new TourGuideService(mGpsUtilProxyMock, rewardsServiceMock);
-
-    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
-
-    Location location = new Location(0.1, 0.2);
-    VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location,
-        new Date());
-    user.addToVisitedLocations(visitedLocation);
-
-    Location location2 = new Location(0.4, 0.9);
-    VisitedLocation visitedLocation2 = new VisitedLocation(UUID.randomUUID(), location2,
-        new Date());
-    user2.addToVisitedLocations(visitedLocation2);
-
-    tourGuideService.addUser(user);
-    tourGuideService.addUser(user2);
-
-    Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
-
-    tourGuideService.tracker.stopTracking();
-
-    assertEquals(allCurrentLocations.get(user.getUserId().toString()), location);
-    assertEquals(allCurrentLocations.get(user2.getUserId().toString()), location2);
-  }
 
   @Test
   public void updateUserPreferences() {
-    InternalTestHelper.setInternalUserNumber(1);
-    TourGuideService tourGuideService = new TourGuideService(mGpsUtilProxyMock, rewardsServiceMock);
-    String userName = tourGuideService.getAllUsers().get(0).getUserName();
+    String userName = "jon";
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     UserPreferences userPreferences = new UserPreferences();
     userPreferences.setAttractionProximity(50);
     userPreferences.setTripDuration(2);
     userPreferences.setNumberOfChildren(3);
 
-    UserPreferences result = tourGuideService.updateUserPreferences(userName, userPreferences);
+    when(userServiceMock.getUser(userName)).thenReturn(user);
+
+    UserPreferences result = tourGuideService.updateUserPreferences(userName,
+        userPreferences);
     assertEquals(result, userPreferences);
   }
+
 
 }

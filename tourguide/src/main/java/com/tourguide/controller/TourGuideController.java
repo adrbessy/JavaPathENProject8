@@ -10,6 +10,7 @@ import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.UserService;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +31,9 @@ public class TourGuideController {
 
   @Autowired
   TourGuideService tourGuideService;
+
+  @Autowired
+  UserService userService;
 
   @Autowired
   RewardsService rewardsService;
@@ -54,7 +58,7 @@ public class TourGuideController {
   @GetMapping("/users")
   public List<User> getUsers() {
     logger.info("Get request with the endpoint 'users'.");
-    List<User> userList = tourGuideService.getAllUsers();
+    List<User> userList = userService.getAllUsers();
     logger.info(
         "response following the GET on the endpoint 'users'.");
     return userList;
@@ -69,7 +73,7 @@ public class TourGuideController {
   @GetMapping("/location")
   public Location getLocation(@RequestParam String userName) {
     logger.info("Get request with the endpoint 'location'.");
-    VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+    VisitedLocation visitedLocation = tourGuideService.getUserLocation(userService.getUser(userName));
     logger.info(
         "response following the GET on the endpoint 'location'.");
     return visitedLocation.location;
@@ -80,12 +84,12 @@ public class TourGuideController {
    * 
    * @return - A List of Map <user id, Location>
    */
-  @GetMapping("/currentLocationAllUsers")
-  public List<Map<String, Location>> getCurrentLocationAllUsers() {
-    logger.info("Get request with the endpoint 'locationAllUsers'.");
-    List<Map<String, Location>> currentLocationAllUsersList = tourGuideService.getCurrentLocationAllUsers();
+  @GetMapping("/currentLocationForAllUsers")
+  public List<Map<String, Location>> getCurrentLocationForAllUsers() {
+    logger.info("Get request with the endpoint 'currentLocationForAllUsers'.");
+    List<Map<String, Location>> currentLocationAllUsersList = tourGuideService.getCurrentLocationForAllUsers();
     logger.info(
-        "response following the GET on the endpoint 'locationAllUsers'.");
+        "response following the GET on the endpoint 'currentLocationForAllUsers'.");
     return currentLocationAllUsersList;
   }
 
@@ -104,9 +108,9 @@ public class TourGuideController {
   @GetMapping("/nearbyAttractions")
   public List<NearbyAttractions> getNearbyAttractions(@RequestParam String userName) {
     logger.info("Get request with the endpoint 'nearbyAttractions'.");
-    VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+    VisitedLocation visitedLocation = tourGuideService.getUserLocation(userService.getUser(userName));
     List<NearbyAttractions> attractionList = tourGuideService.getNearByAttractions(visitedLocation,
-        tourGuideService.getUser(userName));
+        userService.getUser(userName));
     logger.info(
         "response following the GET on the endpoint 'nearbyAttractions'.");
     return attractionList;
@@ -122,7 +126,7 @@ public class TourGuideController {
   @GetMapping("/rewards")
   public List<UserReward> getRewards(@RequestParam String userName) {
     logger.info("Get request with the endpoint 'rewards'.");
-    List<UserReward> rewards = rewardsService.getUserRewards(tourGuideService.getUser(userName));
+    List<UserReward> rewards = rewardsService.getUserRewards(userService.getUser(userName));
     logger.info(
         "response following the GET on the endpoint 'nearbyAttractions'.");
     return rewards;
@@ -154,7 +158,7 @@ public class TourGuideController {
   @GetMapping("/tripDeals")
   public List<Provider> getTripDeals(@RequestParam String userName) {
     logger.info("Get request with the endpoint 'tripDeals'.");
-    List<Provider> providers = tourGuideService.getTripDeals(tourGuideService.getUser(userName));
+    List<Provider> providers = tourGuideService.getTripDeals(userService.getUser(userName));
     logger.info(
         "response following the GET on the endpoint 'tripDeals'.");
     return providers;

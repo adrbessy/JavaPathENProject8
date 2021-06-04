@@ -1,6 +1,5 @@
 package com.tourguide.service;
 
-import com.tourguide.exception.NotFoundException;
 import com.tourguide.model.AttractionDistance;
 import com.tourguide.model.NearbyAttractions;
 import com.tourguide.model.User;
@@ -42,6 +41,8 @@ public class TourGuideService {
   LocationService locationService;
   @Autowired
   MicroserviceRewardCentralProxy mRewardCentralProxy;
+  @Autowired
+  UserService userService;
 
   private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
   private final RewardsService rewardsService;
@@ -69,28 +70,15 @@ public class TourGuideService {
   }
 
 
-  public List<Map<String, Location>> getCurrentLocationAllUsers() {
+  public List<Map<String, Location>> getCurrentLocationForAllUsers() {
     Map<String, Location> usersLocations = new HashMap<>();
     List<Map<String, Location>> AllUserLocation = new ArrayList<>();
-    for (User user : getAllUsers()) {
+    for (User user : userService.getAllUsers()) {
       VisitedLocation visitedLocation = locationService.trackUserLocation(user);
       usersLocations.put(user.getUserId().toString(), visitedLocation.location);
       AllUserLocation.add(usersLocations);
     }
     return AllUserLocation;
-  }
-
-
-  public User getUser(String userName) {
-    if (!internalUserMap.containsKey(userName)) {
-      logger.error("This username does not exist" + userName);
-      throw new NotFoundException(userName);
-    }
-    return internalUserMap.get(userName);
-  }
-
-  public List<User> getAllUsers() {
-    return internalUserMap.values().stream().collect(Collectors.toList());
   }
 
   public void addUser(User user) {
@@ -108,8 +96,6 @@ public class TourGuideService {
     user.setTripDeals(providers);
     return providers;
   }
-
-
 
   public List<NearbyAttractions> getNearByAttractions(VisitedLocation visitedLocation, User user) {
 
@@ -167,7 +153,7 @@ public class TourGuideService {
    */
   public Map<String, Location> getLastSavedLocationAllUsers() {
 
-    List<User> usersList = getAllUsers();
+    List<User> usersList = userService.getAllUsers();
     Map<String, Location> usersLocations = new HashMap<>();
 
     usersList.forEach(user -> {
@@ -188,7 +174,7 @@ public class TourGuideService {
    * @return the updated user preferences
    */
   public UserPreferences updateUserPreferences(String userName, UserPreferences userPreferences) {
-    User userToUpdate = getUser(userName);
+    User userToUpdate = userService.getUser(userName);
     if (userPreferences.getAttractionProximity() != Integer.MAX_VALUE) {
       userToUpdate.getUserPreferences().setAttractionProximity(userPreferences.getAttractionProximity());
     }
@@ -226,7 +212,7 @@ public class TourGuideService {
   private static final Random RANDOM = new Random();
   // Database connection will be used for external users, but for testing purposes
   // internal users are provided and stored in memory
-  private final Map<String, User> internalUserMap = new HashMap<>();
+  final Map<String, User> internalUserMap = new HashMap<>();
 
   private void initializeInternalUsers() {
     IntStream.range(0, InternalTestHelper.getInternalUserNumber()).forEach(i -> {
