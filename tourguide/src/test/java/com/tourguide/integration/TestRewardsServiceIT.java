@@ -7,6 +7,7 @@ import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
+import com.tourguide.service.AttractionService;
 import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
@@ -31,6 +32,9 @@ public class TestRewardsServiceIT {
   @Autowired
   RewardsService rewardsService;
 
+  @Autowired
+  AttractionService attractionService;
+
   @BeforeAll
   public static void setUp() {
     InternalTestHelper.setInternalUserNumber(1);
@@ -38,7 +42,7 @@ public class TestRewardsServiceIT {
 
   @Test
   public void userGetRewards() {
-    rewardsService.setProximityBuffer(10);
+    attractionService.setProximityBuffer(10);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     Attraction attraction = mGpsUtilProxy.getAttractions().get(0);
     user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date()));
@@ -57,7 +61,7 @@ public class TestRewardsServiceIT {
 
   @Test
   public void nearAllAttractions() {
-    rewardsService.setProximityBuffer(Integer.MAX_VALUE);
+    attractionService.setProximityBuffer(Integer.MAX_VALUE);
     rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
     List<UserReward> userRewards = rewardsService.getUserRewards(tourGuideService.getAllUsers().get(0));
     tourGuideService.tracker.stopTracking();

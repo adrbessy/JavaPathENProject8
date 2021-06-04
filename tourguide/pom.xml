@@ -198,6 +198,8 @@
                 <configuration>
                     <excludes>
                         <exclude>**/exception/*.class</exclude>
+                        <exclude>**/configuration/*.class</exclude>
+                        <exclude>**/TourguideApplication.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

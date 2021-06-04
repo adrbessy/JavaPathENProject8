@@ -10,6 +10,7 @@ import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
+import com.tourguide.proxies.MicroserviceRewardCentralProxy;
 import com.tourguide.proxies.MicroserviceTripPricerProxy;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -39,6 +40,8 @@ public class TourGuideService {
   MicroserviceTripPricerProxy TripPricerProxy;
   @Autowired
   LocationService locationService;
+  @Autowired
+  MicroserviceRewardCentralProxy mRewardCentralProxy;
 
   private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
   private final RewardsService rewardsService;
@@ -122,21 +125,24 @@ public class TourGuideService {
 
     attractionDistanceList.sort(Comparator.comparing(AttractionDistance::getDistance));
 
-    List<AttractionDistance> attractionDistanceListFirst5 = attractionDistanceList.subList(0,
+    if (attractions.size() < numberOfAttractionsNearest) {
+      numberOfAttractionsNearest = attractions.size();
+    }
+    List<AttractionDistance> nearestDistanceAttractionList = attractionDistanceList.subList(0,
         numberOfAttractionsNearest);
 
-    List<Attraction> nearbyAttractions = attractionDistanceListFirst5.stream()
+    List<Attraction> sortedNearestDistanceAttractionList = nearestDistanceAttractionList.stream()
         .map(AttractionDistance::getAttraction)
         .collect(Collectors.toList());
 
     int i = 0;
-    for (Attraction nearbyAttraction : nearbyAttractions) {
+    for (Attraction nearbyAttraction : sortedNearestDistanceAttractionList) {
       NearbyAttractions nearbyAttractionObject = new NearbyAttractions(nearbyAttraction.attractionName,
           nearbyAttraction.latitude,
           nearbyAttraction.longitude, visitedLocation.location.latitude,
           visitedLocation.location.longitude,
-          attractionDistanceListFirst5.get(i).distance,
-          rewardsService.getRewardPoints(nearbyAttraction, user));
+          nearestDistanceAttractionList.get(i).distance,
+          mRewardCentralProxy.getAttractionRewardPoints(nearbyAttraction.attractionId, user.getUserId()));
       nearbyAttractionsList.add(nearbyAttractionObject);
       i++;
     }
