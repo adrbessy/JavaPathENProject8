@@ -9,6 +9,7 @@ import com.tourguide.model.UserPreferences;
 import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.Location;
 import com.tourguide.model.gpsUtil.VisitedLocation;
+import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.proxies.MicroserviceRewardCentralProxy;
 import com.tourguide.proxies.MicroserviceTripPricerProxy;
@@ -40,7 +41,7 @@ public class TestTourGuideServiceImpl {
   @MockBean
   MicroserviceRewardCentralProxy mRewardCentralProxyMock;
 
-  @Mock
+  @MockBean
   MicroserviceTripPricerProxy TripPricerProxyMock;
 
   @Mock
@@ -99,28 +100,31 @@ public class TestTourGuideServiceImpl {
     assertThat(result.get(0).get(user.getUserId().toString())).isEqualTo(visitedLocation.location);
   }
 
+  @Test
+  public void getTripDeals() {
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+    Provider provider = new Provider(UUID.randomUUID(), "merry trip", 56666);
+    List<Provider> providerList = new ArrayList<>();
+    providerList.add(provider);
 
+    when(TripPricerProxyMock.getPrice(org.mockito.ArgumentMatchers
+        .anyString(),
+        org.mockito.ArgumentMatchers
+            .any(UUID.class),
+        org.mockito.ArgumentMatchers
+            .anyInt(),
+        org.mockito.ArgumentMatchers
+            .anyInt(),
+        org.mockito.ArgumentMatchers
+            .anyInt(),
+        org.mockito.ArgumentMatchers
+            .anyInt())).thenReturn(providerList);
 
-  /*
-   * @Test public void getTripDeals() {
-   * InternalTestHelper.setInternalUserNumber(0);
-   * 
-   * User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-   * Provider provider = new Provider(UUID.randomUUID(), "merry trip", 56666);
-   * 
-   * List<Provider> providerList = new ArrayList<>(); providerList.add(provider);
-   * 
-   * when(TripPricerProxyMock.getPrice(org.mockito.ArgumentMatchers .anyString(),
-   * org.mockito.ArgumentMatchers .any(), org.mockito.ArgumentMatchers .anyInt(),
-   * org.mockito.ArgumentMatchers .anyInt(), org.mockito.ArgumentMatchers
-   * .anyInt(), org.mockito.ArgumentMatchers .anyInt())).thenReturn(providerList);
-   * 
-   * List<Provider> providers = tourGuideService.getTripDeals(user);
-   * 
-   * tourGuideService.tracker.stopTracking();
-   * 
-   * assertEquals(1, providers.size()); }
-   */
+    List<Provider> providers = tourGuideService.getTripDeals(user);
+
+    assertEquals(1, providers.size());
+  }
+
 
   @Test
   public void getNearByAttractions() {
