@@ -54,7 +54,7 @@ public class TestTourGuideServiceImpl {
   UserService userServiceMock;
 
   @Test
-  public void testGetUserLocation() {
+  public void testGetUserLocationIfVisitedLocation() {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     Location location = new Location(0.1, 0.2);
     VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location,
@@ -172,6 +172,9 @@ public class TestTourGuideServiceImpl {
     userPreferences.setAttractionProximity(50);
     userPreferences.setTripDuration(2);
     userPreferences.setNumberOfChildren(3);
+    userPreferences.setCurrency(null);
+    userPreferences.setTicketQuantity(2);
+    userPreferences.setNumberOfAdults(3);
 
     when(userServiceMock.getUser(userName)).thenReturn(user);
 

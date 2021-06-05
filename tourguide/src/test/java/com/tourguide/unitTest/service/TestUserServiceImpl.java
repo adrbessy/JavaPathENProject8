@@ -2,6 +2,7 @@ package com.tourguide.unitTest.service;
 
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.RewardsService;
+import com.tourguide.service.TourGuideService;
 import com.tourguide.service.UserService;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class TestUserServiceImpl {
 
   @MockBean
   private MicroserviceGpsUtilProxy mGpsUtilProxyMock;
+
+  @MockBean
+  private TourGuideService tourGuideServiceMock;
 
   @Mock
   private RewardsService rewardsServiceMock;
@@ -38,5 +42,21 @@ public class TestUserServiceImpl {
    * 
    * assertTrue(allUsers.contains(user)); assertTrue(allUsers.contains(user2)); }
    */
+
+  /*
+   * @Test public void getUser() { User user = new User(UUID.randomUUID(),
+   * "Alain", "000", "jon@tourGuide.com");
+   * 
+   * when(tourGuideServiceMock.isInInternalUserMap(user.getUserName())).thenReturn
+   * (true);
+   * 
+   * when(tourGuideServiceMock.internalUserMap.get(user.getUserName())).thenReturn
+   * (user);
+   * 
+   * User result = userService.getUser(user.getUserName());
+   * 
+   * assertThat(result).isEqualTo(user); }
+   */
+
 
 }

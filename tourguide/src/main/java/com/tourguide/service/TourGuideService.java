@@ -212,7 +212,7 @@ public class TourGuideService {
   private static final Random RANDOM = new Random();
   // Database connection will be used for external users, but for testing purposes
   // internal users are provided and stored in memory
-  final Map<String, User> internalUserMap = new HashMap<>();
+  public final Map<String, User> internalUserMap = new HashMap<>();
 
   private void initializeInternalUsers() {
     IntStream.range(0, InternalTestHelper.getInternalUserNumber()).forEach(i -> {

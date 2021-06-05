@@ -4,72 +4,41 @@ import com.tourguide.model.User;
 import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Attraction;
 import com.tourguide.model.gpsUtil.Location;
-import com.tourguide.model.gpsUtil.VisitedLocation;
-import com.tourguide.proxies.MicroserviceGpsUtilProxy;
-import com.tourguide.proxies.MicroserviceRewardCentralProxy;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class RewardsService {
+public interface RewardsService {
 
-  @Autowired
-  MicroserviceGpsUtilProxy mGpsUtilProxy;
+  /**
+   * Calculate the rewards with the visitedLocations of the user
+   * 
+   * @param user An user
+   */
+  void calculateRewards(User user);
 
-  @Autowired
-  MicroserviceRewardCentralProxy mRewardCentralProxy;
+  /**
+   * Check if a location is within an attraction proximity.
+   * 
+   * @param attraction An attraction
+   * @param location   A location
+   * @return true if the attraction is enough near from the location.
+   */
+  boolean isWithinAttractionProximity(Attraction attraction, Location location);
 
-  @Autowired
-  AttractionService attractionService;
+  /**
+   * Calculate the distance between two locations.
+   * 
+   * @param loc1 A location
+   * @param loc2 A location
+   * @return the distance.
+   */
+  double getDistance(Location loc1, Location loc2);
 
-  private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
-
-
-  private int attractionProximityRange = 200;
-
-  public RewardsService() {
-
-  }
-
-  public void calculateRewards(User user) {
-    List<VisitedLocation> userLocations = user.getVisitedLocations();
-    List<Attraction> attractions = mGpsUtilProxy.getAttractions();
-
-    for (VisitedLocation visitedLocation : userLocations) {
-      for (Attraction attraction : attractions) {
-        if (user.getUserRewards().stream().filter(r -> r.attraction.attractionName.equals(attraction.attractionName))
-            .count() == 0) {
-          if (attractionService.nearAttraction(visitedLocation, attraction)) {
-            user.addUserReward(new UserReward(visitedLocation, attraction,
-                mRewardCentralProxy.getAttractionRewardPoints(attraction.attractionId, user.getUserId())));
-          }
-        }
-      }
-    }
-
-  }
-
-  public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
-    return getDistance(attraction, location) > attractionProximityRange ? false : true;
-  }
-
-  public double getDistance(Location loc1, Location loc2) {
-    double lat1 = Math.toRadians(loc1.latitude);
-    double lon1 = Math.toRadians(loc1.longitude);
-    double lat2 = Math.toRadians(loc2.latitude);
-    double lon2 = Math.toRadians(loc2.longitude);
-
-    double angle = Math.acos(Math.sin(lat1) * Math.sin(lat2)
-        + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon1 - lon2));
-
-    double nauticalMiles = 60 * Math.toDegrees(angle);
-    double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
-    return statuteMiles;
-  }
-
-  public List<UserReward> getUserRewards(User user) {
-    return user.getUserRewards();
-  }
+  /**
+   * Retrieve the list of rewards of an user.
+   * 
+   * @param user An user
+   * @return the list of rewards.
+   */
+  List<UserReward> getUserRewards(User user);
 
 }

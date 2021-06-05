@@ -88,14 +88,14 @@ public class TestTourGuideServiceIT {
 
 
   @Test
-  public void getAllCurrentLocations() {
+  public void getLastSavedLocationAllUsers() {
     InternalTestHelper.setInternalUserNumber(0);
-    // TourGuideService tourGuideService = new TourGuideService(mGpsUtilProxy,
-    // rewardsService);
 
-    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    User user2 = new User(UUID.randomUUID(), "jon2", "000",
+    User user = new User(UUID.randomUUID(), "Isabelle", "000", "jon@tourGuide.com");
+    User user2 = new User(UUID.randomUUID(), "Isabelle2", "000",
         "jon2@tourGuide.com");
+
+    System.out.println("InternalTestHelper.getInternalUserNumber() : " + InternalTestHelper.getInternalUserNumber());
 
     Location location = new Location(0.1, 0.2);
     VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location, new Date());
@@ -121,8 +121,8 @@ public class TestTourGuideServiceIT {
   public void testAddUserAndGetUser() {
     InternalTestHelper.setInternalUserNumber(0);
 
-    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
+    User user = new User(UUID.randomUUID(), "Adrien", "000", "jon@tourGuide.com");
+    User user2 = new User(UUID.randomUUID(), "Adrien2", "000", "jon2@tourGuide.com");
 
     tourGuideService.addUser(user);
     tourGuideService.addUser(user2);

@@ -9,7 +9,9 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class Tracker extends Thread {
 
   @Autowired
@@ -20,12 +22,9 @@ public class Tracker extends Thread {
   private Logger logger = LoggerFactory.getLogger(Tracker.class);
   private static final long trackingPollingInterval = TimeUnit.MINUTES.toSeconds(5);
   private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-  // private final TourGuideService tourGuideService;
   private boolean stop = false;
 
   public Tracker(TourGuideService tourGuideService) {
-    // this.tourGuideService = tourGuideService;
-
     executorService.submit(this);
   }
 

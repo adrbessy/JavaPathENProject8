@@ -2,9 +2,7 @@ package com.tourguide.integration;
 
 import static org.junit.Assert.assertTrue;
 import com.tourguide.model.User;
-import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.service.InternalTestHelper;
-import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
 import com.tourguide.service.UserService;
 import java.util.List;
@@ -20,12 +18,6 @@ public class TestUserServiceIT {
   UserService userService;
   @Autowired
   TourGuideService tourGuideService;
-
-  @Autowired
-  private MicroserviceGpsUtilProxy mGpsUtilProxy;
-
-  @Autowired
-  private RewardsService rewardsService;
 
   @Test
   public void getAllUsers() {
