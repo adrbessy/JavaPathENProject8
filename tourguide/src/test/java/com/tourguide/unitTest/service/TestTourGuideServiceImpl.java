@@ -101,6 +101,16 @@ public class TestTourGuideServiceImpl {
   }
 
   @Test
+  public void testAddUser() {
+    InternalTestHelper.setInternalUserNumber(0);
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+
+    tourGuideService.addUser(user);
+
+    assertThat(tourGuideService.internalUserMap.get(user.getUserName())).isEqualTo(user);
+  }
+
+  @Test
   public void getTripDeals() {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     Provider provider = new Provider(UUID.randomUUID(), "merry trip", 56666);
