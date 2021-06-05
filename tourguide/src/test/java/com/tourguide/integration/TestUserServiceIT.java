@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import com.tourguide.model.User;
 import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.TourGuideServiceImpl;
 import com.tourguide.service.UserService;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,8 @@ public class TestUserServiceIT {
   UserService userService;
   @Autowired
   TourGuideService tourGuideService;
+  @Autowired
+  TourGuideServiceImpl tourGuideServiceImpl;
 
   @Test
   public void getAllUsers() {
@@ -31,7 +34,7 @@ public class TestUserServiceIT {
 
     List<User> allUsers = userService.getAllUsers();
 
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     assertTrue(allUsers.contains(user));
     assertTrue(allUsers.contains(user2));

@@ -9,6 +9,7 @@ import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.LocationService;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.TourGuideServiceImpl;
 import com.tourguide.service.UserService;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +29,9 @@ public class TestPerformanceIT {
 
   @Autowired
   TourGuideService tourGuideService;
+
+  @Autowired
+  TourGuideServiceImpl tourGuideServiceImpl;
 
   @Autowired
   LocationService locationService;
@@ -69,7 +73,7 @@ public class TestPerformanceIT {
       locationService.trackUserLocation(user);
     }
     stopWatch.stop();
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     System.out.println(
         "highVolumeTrackLocation: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
@@ -96,7 +100,7 @@ public class TestPerformanceIT {
       assertTrue(user.getUserRewards().size() > 0);
     }
     stopWatch.stop();
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     System.out.println(
         "highVolumeGetRewards: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");

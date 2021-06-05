@@ -79,20 +79,6 @@ public class TourGuideController {
     return visitedLocation.location;
   }
 
-  /**
-   * Get the current location of all users
-   * 
-   * @return - A List of Map <user id, Location>
-   */
-  @GetMapping("/currentLocationForAllUsers")
-  public List<Map<String, Location>> getCurrentLocationForAllUsers() {
-    logger.info("Get request with the endpoint 'currentLocationForAllUsers'.");
-    List<Map<String, Location>> currentLocationAllUsersList = tourGuideService.getCurrentLocationForAllUsers();
-    logger.info(
-        "response following the GET on the endpoint 'currentLocationForAllUsers'.");
-    return currentLocationAllUsersList;
-  }
-
 
   /*
    * Get the closest five tourist attractions to the user - no matter how far away
@@ -142,7 +128,7 @@ public class TourGuideController {
   @GetMapping("/lastSavedLocationForAllUsers")
   public Map<String, Location> getLastSavedLocationForAllUsers() {
     logger.info("Get request with the endpoint 'allLastLocations'.");
-    Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
+    Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationForAllUsers();
     logger.info(
         "response following the GET on the endpoint 'allLastLocations'.");
     return allCurrentLocations;

@@ -12,6 +12,7 @@ import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.LocationService;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.TourGuideServiceImpl;
 import com.tourguide.service.UserService;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,9 @@ public class TestTourGuideServiceIT {
   TourGuideService tourGuideService;
 
   @Autowired
+  TourGuideServiceImpl tourGuideServiceImpl;
+
+  @Autowired
   RewardsService rewardsService;
 
   @Autowired
@@ -45,7 +49,7 @@ public class TestTourGuideServiceIT {
     InternalTestHelper.setInternalUserNumber(0);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     VisitedLocation visitedLocation = locationService.trackUserLocation(user);
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
     assertTrue(visitedLocation.userId.equals(user.getUserId()));
   }
 
@@ -56,7 +60,7 @@ public class TestTourGuideServiceIT {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     VisitedLocation visitedLocation = locationService.trackUserLocation(user);
 
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     assertEquals(user.getUserId(), visitedLocation.userId);
   }
@@ -68,7 +72,7 @@ public class TestTourGuideServiceIT {
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     VisitedLocation visitedLocation = locationService.trackUserLocation(user);
     List<NearbyAttractions> attractions = tourGuideService.getNearByAttractions(visitedLocation, user);
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     assertEquals(5, attractions.size());
   }
@@ -81,7 +85,7 @@ public class TestTourGuideServiceIT {
 
     List<Provider> providers = tourGuideService.getTripDeals(user);
 
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     assertEquals(5, providers.size());
   }
@@ -108,9 +112,9 @@ public class TestTourGuideServiceIT {
     tourGuideService.addUser(user);
     tourGuideService.addUser(user2);
 
-    Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationAllUsers();
+    Map<String, Location> allCurrentLocations = tourGuideService.getLastSavedLocationForAllUsers();
 
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     assertEquals(allCurrentLocations.get(user.getUserId().toString()), location);
     assertEquals(allCurrentLocations.get(user2.getUserId().toString()),
@@ -130,7 +134,7 @@ public class TestTourGuideServiceIT {
     User retrivedUser = userService.getUser(user.getUserName());
     User retrivedUser2 = userService.getUser(user2.getUserName());
 
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     assertEquals(user, retrivedUser);
     assertEquals(user2, retrivedUser2);

@@ -17,11 +17,11 @@ import com.tourguide.service.InternalTestHelper;
 import com.tourguide.service.LocationService;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
+import com.tourguide.service.TourGuideServiceImpl;
 import com.tourguide.service.UserService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -34,6 +34,9 @@ public class TestTourGuideServiceImpl {
 
   @Autowired
   private TourGuideService tourGuideService;
+
+  @Autowired
+  private TourGuideServiceImpl tourGuideServiceImpl;
 
   @MockBean
   private MicroserviceGpsUtilProxy mGpsUtilProxyMock;
@@ -82,32 +85,13 @@ public class TestTourGuideServiceImpl {
   }
 
   @Test
-  public void testGetCurrentLocationForAllUsers() {
-    InternalTestHelper.setInternalUserNumber(0);
-
-    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    List<User> userList = new ArrayList<>();
-    userList.add(user);
-    Location location = new Location(0.1, 0.2);
-    VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location, new Date());
-
-    when(userServiceMock.getAllUsers()).thenReturn(
-        userList);
-    when(locationServiceMock.trackUserLocation(user)).thenReturn(
-        visitedLocation);
-
-    List<Map<String, Location>> result = tourGuideService.getCurrentLocationForAllUsers();
-    assertThat(result.get(0).get(user.getUserId().toString())).isEqualTo(visitedLocation.location);
-  }
-
-  @Test
   public void testAddUser() {
     InternalTestHelper.setInternalUserNumber(0);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 
     tourGuideService.addUser(user);
 
-    assertThat(tourGuideService.internalUserMap.get(user.getUserName())).isEqualTo(user);
+    assertThat(tourGuideServiceImpl.internalUserMap.get(user.getUserName())).isEqualTo(user);
   }
 
   @Test
@@ -166,7 +150,7 @@ public class TestTourGuideServiceImpl {
 
     List<NearbyAttractions> result = tourGuideService.getNearByAttractions(visitedLocation, user);
 
-    tourGuideService.tracker.stopTracking();
+    tourGuideServiceImpl.tracker.stopTracking();
 
     assertThat(result.get(0).getAttractionLatitude()).isEqualTo(attraction.getLatitude());
     assertThat(result.get(0).getAttractionLongitude()).isEqualTo(attraction.getLongitude());

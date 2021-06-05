@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   @Autowired
-  private TourGuideService tourGuideService;
+  private TourGuideServiceImpl tourGuideServiceImpl;
 
   private Logger logger = LoggerFactory.getLogger(UserService.class);
 
   public List<User> getAllUsers() {
-    return tourGuideService.internalUserMap.values().stream().collect(Collectors.toList());
+    return tourGuideServiceImpl.internalUserMap.values().stream().collect(Collectors.toList());
   }
 
   public User getUser(String userName) {
-    if (!tourGuideService.internalUserMap.containsKey(userName)) {
+    if (!tourGuideServiceImpl.internalUserMap.containsKey(userName)) {
       logger.error("This username does not exist :" + userName);
       throw new NotFoundException(userName);
     }
-    return tourGuideService.internalUserMap.get(userName);
+    return tourGuideServiceImpl.internalUserMap.get(userName);
   }
 
 }

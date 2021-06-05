@@ -88,7 +88,7 @@ public class TestTourGuideController {
   @Test
   public void testGetLastSavedLocationForAllUsers() throws Exception {
     Map<String, Location> allCurrentLocations = null;
-    when(tourGuideServiceMock.getLastSavedLocationAllUsers()).thenReturn(allCurrentLocations);
+    when(tourGuideServiceMock.getLastSavedLocationForAllUsers()).thenReturn(allCurrentLocations);
     mockMvc.perform(get("/lastSavedLocationForAllUsers")).andExpect(status().isOk());
   }
 
