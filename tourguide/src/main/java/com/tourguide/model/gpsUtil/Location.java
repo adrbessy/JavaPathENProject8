@@ -1,5 +1,10 @@
 package com.tourguide.model.gpsUtil;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Location {
 
   public final double longitude;
