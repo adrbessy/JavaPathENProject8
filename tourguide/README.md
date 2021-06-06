@@ -4,6 +4,15 @@
 An application to know the nearest attractions and to earn discounts on hotels and attractions.
 This app uses Java to run.
 
+
+### Architecture diagram
+![Alt text](ressources/tourguide_architecture.png?raw=true "Architecture diagram of Tourguide")
+
+
+### UML class diagram
+![Alt text](ressources/conceptionDiagram.png?raw=true "class diagram of Tourguide")
+
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
