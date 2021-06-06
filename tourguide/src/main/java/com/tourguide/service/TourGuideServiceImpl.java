@@ -48,7 +48,7 @@ public class TourGuideServiceImpl implements TourGuideService {
   private final RewardsService rewardsService;
   public final Tracker tracker;
   boolean testMode = true;
-  int numberOfAttractionsNearest = 5;
+  int numberOfNearestAttractions = 5;
 
   public TourGuideServiceImpl(MicroserviceGpsUtilProxy mGpsUtilProxy, RewardsService rewardsService) {
     this.rewardsService = rewardsService;
@@ -63,6 +63,12 @@ public class TourGuideServiceImpl implements TourGuideService {
     addShutDownHook();
   }
 
+  /**
+   * Retrieve the last visited location of the user.
+   * 
+   * @param user An user
+   * @return the last visited location.
+   */
   @Override
   public VisitedLocation getUserLocation(User user) {
     logger.debug("in the method getUserLocation in the class TourGuideServiceImpl");
@@ -71,7 +77,11 @@ public class TourGuideServiceImpl implements TourGuideService {
     return visitedLocation;
   }
 
-
+  /**
+   * Add an user in the internalUserMap.
+   * 
+   * @param user An user
+   */
   @Override
   public void addUser(User user) {
     logger.debug("in the method addUser in the class TourGuideServiceImpl");
@@ -80,6 +90,13 @@ public class TourGuideServiceImpl implements TourGuideService {
     }
   }
 
+  /**
+   * Retrieve a list of Provider (an offer by provider) according to the
+   * preferences of an user.
+   * 
+   * @param user An user
+   * @return a list of Provider
+   */
   @Override
   public List<Provider> getTripDeals(User user) {
     logger.debug("in the method getTripDeals in the class TourGuideServiceImpl");
@@ -92,6 +109,15 @@ public class TourGuideServiceImpl implements TourGuideService {
     return providers;
   }
 
+  /**
+   * Retrieve a list of NearbyAttraction (attractionName, attractionLatitude,
+   * attractionLongitude, userLatitude, userLongitude,
+   * distanceBetweenUserAndAttraction, rewardPoints)
+   * 
+   * @param visitedLocation A visitedLocation
+   * @param user            An user
+   * @return a list of NearbyAttraction
+   */
   @Override
   public List<NearbyAttractions> getNearByAttractions(VisitedLocation visitedLocation, User user) {
     logger.debug("in the method getNearByAttractions in the class TourGuideServiceImpl");
@@ -99,20 +125,30 @@ public class TourGuideServiceImpl implements TourGuideService {
     List<AttractionDistance> attractionDistanceList = new ArrayList<>();
     List<NearbyAttractions> nearbyAttractionsList = new ArrayList<>();
 
+    // make a list of AttractionDistance (attraction, distance between attraction
+    // and visited location)
     for (Attraction attraction : attractions) {
       double distance = rewardsService.getDistance(attraction, visitedLocation.location);
       AttractionDistance locDist = new AttractionDistance(attraction, distance);
       attractionDistanceList.add(locDist);
     }
 
+    // sort the attractioDistanceList according to the distance from the smaller to
+    // the greater
     attractionDistanceList.sort(Comparator.comparing(AttractionDistance::getDistance));
 
-    if (attractions.size() < numberOfAttractionsNearest) {
-      numberOfAttractionsNearest = attractions.size();
+    // if the number of attraction is inferior to the number of attractions we want
+    // to keep, the number of attracitons we want to keep becomes the number of
+    // attractions
+    if (attractions.size() < numberOfNearestAttractions) {
+      numberOfNearestAttractions = attractions.size();
     }
-    List<AttractionDistance> nearestDistanceAttractionList = attractionDistanceList.subList(0,
-        numberOfAttractionsNearest);
 
+    // we keep the numberOfNearestAttractions nearest attractions
+    List<AttractionDistance> nearestDistanceAttractionList = attractionDistanceList.subList(0,
+        numberOfNearestAttractions);
+
+    // we retrieve the attractions from the nearestDistanceAttractionList
     List<Attraction> sortedNearestDistanceAttractionList = nearestDistanceAttractionList.stream()
         .map(AttractionDistance::getAttraction)
         .collect(Collectors.toList());
@@ -131,6 +167,11 @@ public class TourGuideServiceImpl implements TourGuideService {
     return nearbyAttractionsList;
   }
 
+  /**
+   * Registers a new virtual machine shutdown hook. When the program shuts down,
+   * the stopTracking() method is invoked.
+   * 
+   */
   @Override
   public void addShutDownHook() {
     logger.debug("in the method addShutDownHook in the class TourGuideServiceImpl");
@@ -144,9 +185,10 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 
   /**
-   * Get a list of every users most recent location saved in the history
+   * Get a map (user id, last visited location) of the most recent location saved
+   * in the history of every users
    *
-   * @return list of users recent locations
+   * @return the map
    */
   @Override
   public Map<String, Location> getLastSavedLocationForAllUsers() {
@@ -155,7 +197,6 @@ public class TourGuideServiceImpl implements TourGuideService {
     Map<String, Location> usersLocations = new HashMap<>();
 
     usersList.forEach(user -> {
-
       if (user.getVisitedLocations().size() > 0) {
         usersLocations.put(user.getUserId().toString(), user.getLastVisitedLocation().location);
       }
@@ -213,6 +254,10 @@ public class TourGuideServiceImpl implements TourGuideService {
   // internal users are provided and stored in memory
   public final Map<String, User> internalUserMap = new HashMap<>();
 
+  /**
+   * Initialize users for tests
+   * 
+   */
   @Override
   public void initializeInternalUsers() {
     logger.debug("in the method initializeInternalUsers in the class TourGuideServiceImpl");
@@ -228,6 +273,11 @@ public class TourGuideServiceImpl implements TourGuideService {
     logger.debug("Created " + InternalTestHelper.getInternalUserNumber() + " internal test users.");
   }
 
+  /**
+   * Generate a location history for the users (for the tests)
+   * 
+   * @param user An user
+   */
   @Override
   public void generateUserLocationHistory(User user) {
     logger.debug("in the method generateUserLocationHistory in the class TourGuideServiceImpl");
@@ -244,6 +294,11 @@ public class TourGuideServiceImpl implements TourGuideService {
     });
   }
 
+  /**
+   * Get a random time
+   *
+   * @return a Date
+   */
   @Override
   public Date getRandomTime() {
     logger.debug("in the method getRandomTime in the class TourGuideServiceImpl");

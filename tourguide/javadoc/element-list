@@ -1,0 +1,13 @@
+com.tourguide
+com.tourguide.configuration
+com.tourguide.controller
+com.tourguide.exception
+com.tourguide.integration
+com.tourguide.model
+com.tourguide.model.gpsUtil
+com.tourguide.model.tripPricer
+com.tourguide.proxies
+com.tourguide.service
+com.tourguide.unitTest.controller
+com.tourguide.unitTest.model
+com.tourguide.unitTest.service
