@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(name = "tourguide-tripPricer", url = "localhost:9008")
+@FeignClient(name = "tourguide-tripPricer", url = "http://localhost:9008")
 public interface MicroserviceTripPricerProxy {
 
   @GetMapping("/price")

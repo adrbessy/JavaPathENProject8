@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-
 public class User {
   private final UUID userId;
   private final String userName;

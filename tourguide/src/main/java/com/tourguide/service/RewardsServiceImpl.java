@@ -8,6 +8,7 @@ import com.tourguide.model.gpsUtil.VisitedLocation;
 import com.tourguide.proxies.MicroserviceGpsUtilProxy;
 import com.tourguide.proxies.MicroserviceRewardCentralProxy;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,8 @@ public class RewardsServiceImpl implements RewardsService {
   @Override
   public void calculateRewards(User user) {
     logger.debug("in the method calculateRewards in the class RewardsServiceImpl");
-    List<VisitedLocation> userLocations = user.getVisitedLocations();
+    CopyOnWriteArrayList<VisitedLocation> userLocations = new CopyOnWriteArrayList<>();
+    userLocations.addAll(user.getVisitedLocations());
     List<Attraction> attractions = mGpsUtilProxy.getAttractions();
 
     for (VisitedLocation visitedLocation : userLocations) {
