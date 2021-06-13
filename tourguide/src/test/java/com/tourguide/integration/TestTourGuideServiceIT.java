@@ -33,9 +33,6 @@ public class TestTourGuideServiceIT {
   TourGuideService tourGuideService;
 
   @Autowired
-  TourGuideServiceImpl tourGuideServiceImpl;
-
-  @Autowired
   RewardsService rewardsService;
 
   @Autowired
@@ -47,6 +44,7 @@ public class TestTourGuideServiceIT {
   @Test
   public void getTrackUserLocation() {
     InternalTestHelper.setInternalUserNumber(0);
+    TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(mGpsUtilProxy, rewardsService);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     VisitedLocation visitedLocation = locationService.trackUserLocation(user);
     tourGuideServiceImpl.tracker.stopTracking();
@@ -54,39 +52,23 @@ public class TestTourGuideServiceIT {
   }
 
   @Test
-  public void trackUser() {
-    InternalTestHelper.setInternalUserNumber(0);
-
-    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-    VisitedLocation visitedLocation = locationService.trackUserLocation(user);
-
-    tourGuideServiceImpl.tracker.stopTracking();
-
-    assertEquals(user.getUserId(), visitedLocation.userId);
-  }
-
-  @Test
   public void getNearbyAttractions() {
     InternalTestHelper.setInternalUserNumber(0);
-
+    TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(mGpsUtilProxy, rewardsService);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     VisitedLocation visitedLocation = locationService.trackUserLocation(user);
     List<NearbyAttractions> attractions = tourGuideService.getNearByAttractions(visitedLocation, user);
     tourGuideServiceImpl.tracker.stopTracking();
-
     assertEquals(5, attractions.size());
   }
 
   @Test
   public void getTripDeals() {
     InternalTestHelper.setInternalUserNumber(0);
-
+    TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(mGpsUtilProxy, rewardsService);
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-
     List<Provider> providers = tourGuideService.getTripDeals(user);
-
     tourGuideServiceImpl.tracker.stopTracking();
-
     assertEquals(5, providers.size());
   }
 
@@ -94,12 +76,10 @@ public class TestTourGuideServiceIT {
   @Test
   public void getLastSavedLocationAllUsers() {
     InternalTestHelper.setInternalUserNumber(0);
-
+    TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(mGpsUtilProxy, rewardsService);
     User user = new User(UUID.randomUUID(), "Isabelle", "000", "jon@tourGuide.com");
     User user2 = new User(UUID.randomUUID(), "Isabelle2", "000",
         "jon2@tourGuide.com");
-
-    System.out.println("InternalTestHelper.getInternalUserNumber() : " + InternalTestHelper.getInternalUserNumber());
 
     Location location = new Location(0.1, 0.2);
     VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location, new Date());
@@ -124,7 +104,7 @@ public class TestTourGuideServiceIT {
   @Test
   public void testAddUserAndGetUser() {
     InternalTestHelper.setInternalUserNumber(0);
-
+    TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(mGpsUtilProxy, rewardsService);
     User user = new User(UUID.randomUUID(), "Adrien", "000", "jon@tourGuide.com");
     User user2 = new User(UUID.randomUUID(), "Adrien2", "000", "jon2@tourGuide.com");
 

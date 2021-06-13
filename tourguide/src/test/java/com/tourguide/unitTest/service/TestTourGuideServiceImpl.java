@@ -22,6 +22,7 @@ import com.tourguide.service.UserService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -121,7 +122,7 @@ public class TestTourGuideServiceImpl {
 
 
   @Test
-  public void getNearByAttractions() {
+  public void testGetNearByAttractions() {
 
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     int points = 29;
@@ -157,9 +158,25 @@ public class TestTourGuideServiceImpl {
     assertThat(result.get(0).getAttractionName()).isEqualTo(attraction.getAttractionName());
   }
 
+  @Test
+  public void testGetLastSavedLocationForAllUsers() {
+    User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+    Location location = new Location(0.1, 0.2);
+    VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), location,
+        new Date());
+    user.addToVisitedLocations(visitedLocation);
+    List<User> userList = new ArrayList<>();
+    userList.add(user);
+
+    when(userServiceMock.getAllUsers()).thenReturn(userList);
+
+    Map<String, Location> result = tourGuideService.getLastSavedLocationForAllUsers();
+    assertEquals(result.get(user.getUserId().toString()), location);
+  }
+
 
   @Test
-  public void updateUserPreferences() {
+  public void testUpdateUserPreferences() {
     String userName = "jon";
     User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
     UserPreferences userPreferences = new UserPreferences();

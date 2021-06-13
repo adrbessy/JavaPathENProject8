@@ -12,7 +12,6 @@ import com.tourguide.model.tripPricer.Provider;
 import com.tourguide.service.RewardsService;
 import com.tourguide.service.TourGuideService;
 import com.tourguide.service.UserService;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,13 +38,6 @@ public class TestTourGuideController {
 
   @MockBean
   private UserService userServiceMock;
-
-  @Test
-  public void testGetUsers() throws Exception {
-    List<User> userList = new ArrayList<>();
-    when(userServiceMock.getAllUsers()).thenReturn(userList);
-    mockMvc.perform(get("/users")).andExpect(status().isOk());
-  }
 
   @Test
   public void testGetLocation() throws Exception {

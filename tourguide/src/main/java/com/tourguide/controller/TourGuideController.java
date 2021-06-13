@@ -1,7 +1,6 @@
 package com.tourguide.controller;
 
 import com.tourguide.model.NearbyAttractions;
-import com.tourguide.model.User;
 import com.tourguide.model.UserPreferences;
 import com.tourguide.model.UserReward;
 import com.tourguide.model.gpsUtil.Location;
@@ -50,19 +49,6 @@ public class TourGuideController {
     return "Greetings from TourGuide!";
   }
 
-  /**
-   * Read - Get all users
-   * 
-   * @return - An Iterable object of users full filled
-   */
-  @GetMapping("/users")
-  public List<User> getUsers() {
-    logger.info("Get request with the endpoint 'users'.");
-    List<User> userList = userService.getAllUsers();
-    logger.info(
-        "response following the GET on the endpoint 'users'.");
-    return userList;
-  }
 
   /**
    * Get the current location of one user
