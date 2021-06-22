@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"com.tourguide.service","c":"UserService","l":"getAllUsers()"},{"p":"com.tourguide.service","c":"UserService","l":"getUser(String)","url":"getUser(java.lang.String)"}]
