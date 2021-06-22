@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
   /**
    * Retrieve the user corresponding to a given username.
    * 
-   * @param username An username
+   * @param userName An username
    * @return the user.
    */
   @Override

@@ -1,28 +1,32 @@
-version: '3.5'
+version: '3.7'
 
 services:
   tourguide:
     image: tourguide:0.0.1
+    depends_on:
+      - tourguide-gpsUtil
+      - tourguide-rewardCentral
+      - tourguide-tripPricer
     ports:
       - "9005:9005"
     networks: 
       - backend
     
-  tourguide_gpsUtil:
+  tourguide-gpsUtil:
     image: gps_util:0.0.1
     ports:
       - "9006:9006"
     networks: 
       - backend
 
-  tourguide_rewardCentral:
+  tourguide-rewardCentral:
     image: reward_central:0.0.1
     ports:
       - "9007:9007"
     networks: 
       - backend
 
-  tourguide_tripPricer:
+  tourguide-tripPricer:
     image: trip_pricer:0.0.1
     ports:
       - "9008:9008"

@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "tourguide-rewardCentral", url = "http://localhost:9007")
+@FeignClient(name = "tourguide-rewardCentral", url = "http://tourguide-rewardCentral:9007")
 public interface MicroserviceRewardCentralProxy {
 
   @GetMapping("/attractionRewardPoints")

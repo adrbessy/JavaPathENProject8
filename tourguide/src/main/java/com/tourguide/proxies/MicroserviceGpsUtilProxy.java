@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "tourguide-gpsUtil", url = "http://localhost:9006")
+@FeignClient(name = "tourguide-gpsUtil", url = "http://tourguide-gpsUtil:9006")
 public interface MicroserviceGpsUtilProxy {
 
   @GetMapping("/userLocation")

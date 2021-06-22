@@ -15,7 +15,7 @@ public interface UserService {
   /**
    * Retrieve the user corresponding to a given username.
    * 
-   * @param username An username
+   * @param userName An username
    * @return the user.
    */
   User getUser(String userName);
