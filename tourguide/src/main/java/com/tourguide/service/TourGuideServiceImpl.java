@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.money.Monetary;
 import org.javamoney.moneta.Money;
@@ -148,19 +147,15 @@ public class TourGuideServiceImpl implements TourGuideService {
     List<AttractionDistance> nearestDistanceAttractionList = attractionDistanceList.subList(0,
         numberOfNearestAttractions);
 
-    // we retrieve the attractions from the nearestDistanceAttractionList
-    List<Attraction> sortedNearestDistanceAttractionList = nearestDistanceAttractionList.stream()
-        .map(AttractionDistance::getAttraction)
-        .collect(Collectors.toList());
-
     int i = 0;
-    for (Attraction nearbyAttraction : sortedNearestDistanceAttractionList) {
-      NearbyAttractions nearbyAttractionObject = new NearbyAttractions(nearbyAttraction.attractionName,
-          nearbyAttraction.latitude,
-          nearbyAttraction.longitude, visitedLocation.location.latitude,
+    for (AttractionDistance nearbyAttraction : nearestDistanceAttractionList) {
+      NearbyAttractions nearbyAttractionObject = new NearbyAttractions(nearbyAttraction.getAttraction().attractionName,
+          nearbyAttraction.getAttraction().latitude,
+          nearbyAttraction.getAttraction().longitude, visitedLocation.location.latitude,
           visitedLocation.location.longitude,
           nearestDistanceAttractionList.get(i).distance,
-          mRewardCentralProxy.getAttractionRewardPoints(nearbyAttraction.attractionId, user.getUserId()));
+          mRewardCentralProxy.getAttractionRewardPoints(nearbyAttraction.getAttraction().attractionId,
+              user.getUserId()));
       nearbyAttractionsList.add(nearbyAttractionObject);
       i++;
     }
